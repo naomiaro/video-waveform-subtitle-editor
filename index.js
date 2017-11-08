@@ -1,0 +1,1 @@
+var WaveformPlaylist = require('waveform-playlist');

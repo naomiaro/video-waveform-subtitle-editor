@@ -1,0 +1,40 @@
+{
+  "name": "video-waveform-subtitle-editor",
+  "version": "0.0.0",
+  "description": "Subtitle editor with HTML5 video and webaudio",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "webpack:server": "webpack-dev-server --content-base dist/ --colors --host 0.0.0.0 --inline",
+    "start": "npm run webpack:server"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/naomiaro/video-waveform-subtitle-editor.git"
+  },
+  "keywords": [
+    "video",
+    "webaudio",
+    "subtitles",
+    "editor",
+    "subtitle",
+    "youtube"
+  ],
+  "author": "Naomi Aro",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/naomiaro/video-waveform-subtitle-editor/issues"
+  },
+  "homepage": "https://github.com/naomiaro/video-waveform-subtitle-editor#readme",
+  "devDependencies": {
+    "css-loader": "^0.28.7",
+    "extract-text-webpack-plugin": "^3.0.2",
+    "sass-loader": "^6.0.6",
+    "style-loader": "^0.19.0",
+    "webpack": "^3.8.1",
+    "webpack-dev-server": "^2.9.4"
+  },
+  "dependencies": {
+    "waveform-playlist": "^3.0.4"
+  }
+}

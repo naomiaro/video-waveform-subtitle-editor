@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title></title>
+  <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+  <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" />
+</head>
+<body>
+  <div class="container">
+    <div class="wrapper">  
+      <div id="top-bar" class="playlist-top-bar">
+        <div class="playlist-toolbar">
+          <div class="btn-group">
+            <span class="btn-pause btn btn-warning"><i class="fa fa-pause"></i></span>
+            <span class="btn-play btn btn-success"><i class="fa fa-play"></i></span>
+            <span class="btn-stop btn btn-danger"><i class="fa fa-stop"></i></span>
+            <span class="btn-rewind btn btn-success"><i class="fa fa-fast-backward"></i></span>
+            <span class="btn-fast-forward btn btn-success"><i class="fa fa-fast-forward"></i></span>
+          </div>
+          <div class="btn-group">
+            <span title="zoom in" class="btn-zoom-in btn btn-default"><i class="fa fa-search-plus"></i></span>
+            <span title="zoom out" class="btn-zoom-out btn btn-default"><i class="fa fa-search-minus"></i></span>
+            <span title="Download the annotations as json" class="btn-annotations-download btn btn-default">Download JSON</span>
+          </div>
+        </div>
+      </div>
+      <div id="playlist"></div>
+      <form class="form-inline">
+        <div class="form-group">
+          <label for="master-gain">Master Volume</label>
+          <input type="range" min="0" max="100" value="100" class="master-gain form-control" id="master-gain">
+        </div>
+        <div class="checkbox">
+          <label>
+            <input type="checkbox" class="automatic-scroll"> Automatic Scroll
+          </label>
+        </div>
+        <div class="checkbox">
+          <label>
+            <input type="checkbox" class="continuous-play"> Continuous Play
+          </label>
+        </div>
+        <div class="checkbox">
+          <label>
+            <input type="checkbox" class="link-endpoints" checked> Link Endpoints
+          </label>
+        </div>
+      </form>
+      <form class="form-inline">
+        <select class="time-format form-control">
+          <option value="seconds">seconds</option>
+          <option value="thousandths">thousandths</option>
+          <option value="hh:mm:ss">hh:mm:ss</option>
+          <option value="hh:mm:ss.u">hh:mm:ss + tenths</option>
+          <option value="hh:mm:ss.uu">hh:mm:ss + hundredths</option>
+          <option value="hh:mm:ss.uuu" selected="selected">hh:mm:ss + milliseconds</option>
+        </select>
+        <input type="text" class="audio-start input-small form-control">
+        <input type="text" class="audio-end form-control">
+        <label class="audio-pos">00:00:00.0</label>
+      </form>
+    </div>
+  </div>
+  <script type="text/javascript" src="app.js"></script>
+</body>
+</html>
