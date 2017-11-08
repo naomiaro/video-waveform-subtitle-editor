@@ -261,6 +261,8 @@ var downloadUrl = undefined;
 var isLooping = false;
 var playoutPromises;
 
+var video = document.getElementById('video');
+
 function toggleActive(node) {
   var active = node.parentNode.querySelectorAll('.active');
   var i = 0, len = active.length;
@@ -370,11 +372,13 @@ $container.on("click", ".btn-loop", function() {
 
 $container.on("click", ".btn-play", function() {
   ee.emit("play");
+  video.play();
 });
 
 $container.on("click", ".btn-pause", function() {
   isLooping = false;
   ee.emit("pause");
+  video.pause();
 });
 
 $container.on("click", ".btn-stop", function() {
