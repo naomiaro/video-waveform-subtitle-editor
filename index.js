@@ -5,7 +5,13 @@ require('font-awesome/css/font-awesome.min.css');
 require('waveform-playlist/styles/playlist.scss');
 require('./app.scss');
 
-var WaveformPlaylist = require('waveform-playlist');
+const createElement = require('virtual-dom/create-element');
+const EventEmitter = require('event-emitter');
+const Playlist = require('waveform-playlist/lib/Playlist');
+
+window.OfflineAudioContext = window.OfflineAudioContext || window.webkitOfflineAudioContext;
+window.AudioContext = window.AudioContext || window.webkitAudioContext;
+const audioContext = new window.AudioContext();
 
 var actions = [
   {
@@ -78,25 +84,105 @@ fetch('/Mogensen.srt')
       };
     });
 
-    var playlist = WaveformPlaylist.init({
-      container: document.getElementById("playlist"),
-      timescale: true,
-      state: 'select',
-      samplesPerPixel: 1500,
-      zoomLevels: [1500],
-      colors: {
-        waveOutlineColor: '#E0EFF1',
-        timeColor: 'grey',
-        fadeColor: 'black'
-      },
-      annotationList: {
-        annotations: annotations,
-        controls: actions,
-        editable: true,
-        isContinuousPlay: false,
-        linkEndpoints: false
-      }
-    });
+  //   const defaults = {
+  //   ac: audioContext,
+  //   sampleRate: audioContext.sampleRate,
+  //   samplesPerPixel: 4096,
+  //   mono: true,
+  //   fadeType: 'logarithmic',
+  //   exclSolo: false,
+  //   timescale: false,
+  //   controls: {
+  //     show: false,
+  //     width: 150,
+  //   },
+  //   colors: {
+  //     waveOutlineColor: 'white',
+  //     timeColor: 'grey',
+  //     fadeColor: 'black',
+  //   },
+  //   seekStyle: 'line',
+  //   waveHeight: 128,
+  //   state: 'cursor',
+  //   zoomLevels: [512, 1024, 2048, 4096],
+  //   annotationList: {
+  //     annotations: [],
+  //     controls: [],
+  //     editable: false,
+  //     linkEndpoints: false,
+  //     isContinuousPlay: false,
+  //   },
+  //   isAutomaticScroll: false,
+  //   playout: {
+  //     setupSource: (trackGain, masterGain, destination) => {
+
+  //     },
+  //     cleanupSource: (trackGain, masterGain, destination) => {
+        
+  //     }
+  //   },
+  // };
+
+  //   var playlist = WaveformPlaylist.init({
+  //     container: document.getElementById("playlist"),
+  //     timescale: true,
+  //     state: 'select',
+  //     samplesPerPixel: 1500,
+  //     zoomLevels: [1200, 1500, 1800],
+  //     colors: {
+  //       waveOutlineColor: '#E0EFF1',
+  //       timeColor: 'grey',
+  //       fadeColor: 'black'
+  //     },
+  //     annotationList: {
+  //       annotations: annotations,
+  //       controls: actions,
+  //       editable: true,
+  //       isContinuousPlay: false,
+  //       linkEndpoints: false
+  //     }
+  //   });
+
+  const playlist = new Playlist.default();
+  playlist.setSampleRate(audioContext.sampleRate);
+  playlist.setSamplesPerPixel(1500);
+  playlist.setAudioContext(audioContext);
+  playlist.setEventEmitter(EventEmitter());
+  playlist.setUpEventEmitter();
+  playlist.setTimeSelection(0, 0);
+  playlist.setState('select');
+  playlist.setControlOptions({
+      show: false,
+      width: 150,
+  });
+  playlist.setWaveHeight(96);
+  playlist.setColors({
+    waveOutlineColor: '#E0EFF1',
+    timeColor: 'grey',
+    fadeColor: 'black'
+  });
+  playlist.setZoomLevels([1200, 1500, 1800]);
+  playlist.setZoomIndex(1);
+  playlist.setMono(true);
+  playlist.setExclSolo(false);
+  playlist.setShowTimeScale(true);
+  playlist.setSeekStyle('line');
+  playlist.setAnnotations({
+    annotations: annotations,
+    controls: actions,
+    editable: true,
+    isContinuousPlay: false,
+    linkEndpoints: false
+  });
+
+  // take care of initial virtual dom rendering.
+  const tree = playlist.render();
+  const rootNode = createElement(tree);
+  const container = document.getElementById("playlist");
+
+  container.appendChild(rootNode);
+  playlist.tree = tree;
+  playlist.rootNode = rootNode;
 
     playlist.load([
       {
