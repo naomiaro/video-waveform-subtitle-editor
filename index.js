@@ -327,10 +327,16 @@ fetch('/Mogensen.srt')
     });
 
     ee.on('play', (start, end) => {
-      video.currentTime = start || 0;
-      video.play();
       stopVideoAt = end;
-      playlist.play(start, end);
+
+      const doneSeeking = () => {
+        video.play();
+        playlist.play(start, end);
+        video.removeEventListener('seeked', doneSeeking);
+      };
+
+      video.addEventListener('seeked', doneSeeking);
+      video.currentTime = start || 0;
     });
 
     ee.on('pause', () => {
