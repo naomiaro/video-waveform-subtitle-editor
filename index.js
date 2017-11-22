@@ -5,7 +5,6 @@ require('font-awesome/css/font-awesome.min.css');
 require('waveform-playlist/styles/playlist.scss');
 require('./app.scss');
 
-
 var WaveformPlaylist = require('waveform-playlist');
 
 var actions = [
@@ -176,6 +175,7 @@ function updateSelect(start, end) {
 
   startTime = start;
   endTime = end;
+  video.currentTime = start;
 }
 
 function updateTime(time) {
@@ -198,7 +198,7 @@ $container.on("click", ".btn-loop", function() {
 
 $container.on("click", ".btn-play", function() {
   ee.emit("play");
-  video.play();
+  // video.play();
 });
 
 $container.on("click", ".btn-pause", function() {
@@ -420,6 +420,12 @@ function displayDownloadLink(link) {
 /*
 * Code below receives updates from the playlist.
 */
+
+ee.on("play", (start, end) => {
+  video.currentTime = start || 0;
+  video.play();
+});
+
 ee.on("select", updateSelect);
 
 ee.on("timeupdate", updateTime);
@@ -493,6 +499,7 @@ ee.on('finished', function () {
 });
 
 
+// https://developer.mozilla.org/en-US/docs/Web/Guide/Events/Media_events
 
 
 // ytdl https://www.youtube.com/watch?v=q9ANdC7ZFAI --quality 248 --output video.webm
