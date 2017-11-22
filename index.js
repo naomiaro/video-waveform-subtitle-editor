@@ -327,6 +327,7 @@ fetch('/Mogensen.srt')
     });
 
     ee.on('play', (start, end) => {
+      const startAt = start || playlist.pausedAt || playlist.cursor;
       stopVideoAt = end;
 
       const doneSeeking = () => {
@@ -336,7 +337,7 @@ fetch('/Mogensen.srt')
       };
 
       video.addEventListener('seeked', doneSeeking);
-      video.currentTime = start || 0;
+      video.currentTime = startAt;
     });
 
     ee.on('pause', () => {
