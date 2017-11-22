@@ -115,6 +115,7 @@ fetch('/Mogensen.srt')
       isContinuousPlay: false,
       linkEndpoints: false
     });
+    playlist.setIsAutomaticScroll(true);
 
     // take care of initial virtual dom rendering.
     const tree = playlist.render();
