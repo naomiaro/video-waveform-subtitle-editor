@@ -207,12 +207,11 @@ fetch('/Mogensen.srt')
       ee.emit("annotationsrequest");
     });
 
-    $container.on("click", ".btn-loop", function() {
-      playoutPromises = playlist.play(startTime, endTime);
-    });
-
     $container.on("click", ".btn-play", function() {
-      ee.emit("play");
+      const start = playlist.pausedAt || playlist.cursor;
+      video.currentTime = start;
+      video.play();
+      playlist.play();
     });
 
     $container.on("click", ".btn-pause", function() {
