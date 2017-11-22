@@ -360,7 +360,7 @@ $container.on("drop", ".track-drop", function(e) {
       controls: actions,
       editable: true,
       isContinuousPlay: false,
-      linkEndpoints: true
+      linkEndpoints: false
     });
     playlist.drawRequest();
   });
