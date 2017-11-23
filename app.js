@@ -1071,7 +1071,7 @@ fetch('Mogensen.srt')
     playlist.setAudioContext(audioContext);
     playlist.setEventEmitter(EventEmitter());
     playlist.setTimeSelection(0, 0);
-    playlist.setDurationFormat('hh:mm:ss.u');
+    playlist.setDurationFormat('hh:mm:ss.uu');
     playlist.setState('cursor');
     playlist.setControlOptions({
         show: false,
