@@ -13,6 +13,11 @@ window.OfflineAudioContext = window.OfflineAudioContext || window.webkitOfflineA
 window.AudioContext = window.AudioContext || window.webkitAudioContext;
 const audioContext = new window.AudioContext();
 
+const video = document.getElementById('video');
+const captionTrack = video.addTextTrack("captions", "English", "en");
+captionTrack.mode = "showing";
+const cueList = [];
+
 var actions = [
   {
     class: 'fa.fa-minus',
@@ -77,10 +82,16 @@ fetch('/Mogensen.srt')
   .then((srt) => {
     const subtitleData = srtParser.fromSrt(srt, true);
     const annotations = subtitleData.map((subtitle) => {
+      const startSec = subtitle.startTime / 1000;
+      const endSec = subtitle.endTime / 1000;
+      const cue = new VTTCue(startSec, endSec, subtitle.text);
+      cueList.push(cue);
+      captionTrack.addCue(cue);
+
       return {
         id: subtitle.id,
-        begin: subtitle.startTime / 1000,
-        end: subtitle.endTime / 1000,
+        begin: startSec,
+        end: endSec,
         lines: subtitle.text.split('\n')
       };
     });
@@ -153,8 +164,6 @@ fetch('/Mogensen.srt')
     var audioPos = 0;
     var playoutPromises;
     var stopVideoAt;
-
-    var video = document.getElementById('video');
 
     video.addEventListener('timeupdate', () => {
       if (stopVideoAt && stopVideoAt < video.currentTime) {
