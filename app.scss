@@ -1,9 +1,13 @@
+$purple: #7f7fb5;
 $black: #000;
 $red: #e62b1e;
 $annotation-ctrl-height: 50px;
+$audio-ctrl-color: $purple;
+$audio-ctrl-color-stop: $red;
+$audio-ctrl-color-pause: orange;
 
 body {
-  color: #7f7fb5;
+  color: $purple;
   background: $black;
 }
 
@@ -12,6 +16,39 @@ body {
   width: 100%;
   height: 100%;
   margin-bottom: $annotation-ctrl-height;
+}
+
+.audio-ctrl-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.audio-ctrl {
+  display: block;
+  width: 50px;
+  height: 50px;
+  border-radius: 100%;
+  border: 1px solid $audio-ctrl-color;
+  color: $audio-ctrl-color;
+  cursor: pointer;
+  line-height: 50px;
+
+  &.audio-ctrl-big {
+    width: 75px;
+    height: 75px;
+    line-height: 75px;
+  }
+
+  &.btn-stop {
+    color: $audio-ctrl-color-stop;
+    border-color: $audio-ctrl-color-stop;
+  }
+
+  &.btn-pause {
+    color: $audio-ctrl-color-pause;
+    border-color: $audio-ctrl-color-pause;
+  }
 }
 
 .ted-media {
@@ -82,7 +119,7 @@ body {
       flex-direction: row;
       flex-wrap: nowrap;
       justify-content: flex-start;
-      align-items: stretch;
+      align-items: center;
 
       span {
         margin: 0.3rem 1rem;
