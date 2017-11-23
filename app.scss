@@ -19,26 +19,24 @@ body {
     background: $red;
   }
 
-  .annotations {
-    .annotations-text {
-      .annotation {
-        span {
-          margin: 0.3rem 3rem;
-        }
-      }
-
-      .current {
-        background: $black;
-        .annotation-lines {
-          color: $red;
-        }
+  .annotations-text {
+    .annotation {
+      span {
+        margin: 0.3rem 3rem;
       }
     }
 
-    .annotation-lines {
-      color: white;
-      font-weight: 100;
+    .current {
+      background: $black;
+      .annotation-lines {
+        color: $red;
+      }
     }
+  }
+
+  .annotation-lines {
+    color: white;
+    font-weight: 100;
   }
 }
 
