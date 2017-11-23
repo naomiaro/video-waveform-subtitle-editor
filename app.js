@@ -996,10 +996,12 @@ var actions = [
       var delta = 0.010;
       annotation.end -= delta;
 
-      if (opts.linkEndpoints) {
-        next = annotations[i + 1];
-        next && (next.start -= delta);
-      }
+      // update text track cue
+      const cue = cueList[i]
+      captionTrack.removeCue(cue);
+      const updatedCue = new VTTCue(annotation.start, annotation.end, annotation.lines.join('\n'));
+      cueList[i] = updatedCue;
+      captionTrack.addCue(updatedCue);
     }
   },
   {
@@ -1010,10 +1012,12 @@ var actions = [
       var delta = 0.010;
       annotation.end += delta;
 
-      if (opts.linkEndpoints) {
-        next = annotations[i + 1];
-        next && (next.start += delta);
-      }
+      // update text track cue
+      const cue = cueList[i]
+      captionTrack.removeCue(cue);
+      const updatedCue = new VTTCue(annotation.start, annotation.end, annotation.lines.join('\n'));
+      cueList[i] = updatedCue;
+      captionTrack.addCue(updatedCue);
     }
   },
   {
@@ -1032,6 +1036,15 @@ var actions = [
 
       annotation.end = annotation.start + halfDuration;
 
+      // update text track cue
+      captionTrack.removeCue(cueList[i]);
+      const updatedCueOne = new VTTCue(annotation.start, annotation.end, annotation.lines.join('\n'));
+
+      const annotationTwo = annotations[i + 1];
+      const updatedCueTwo = new VTTCue(annotationTwo.start, annotationTwo.end, annotationTwo.lines.join('\n'));
+      captionTrack.addCue(updatedCueOne);
+      captionTrack.addCue(updatedCueTwo);
+
       // loop though and increment ids
       for (let idIndex = i + 2; idIndex < annotations.length; idIndex += 1) {
         let annotation = annotations[idIndex];
@@ -1044,6 +1057,10 @@ var actions = [
     title: 'Delete annotation',
     action: (annotation, i, annotations) => {
       annotations.splice(i, 1);
+
+      // update text track cue
+      const removedCues = cueList.splice(i, 1);
+      captionTrack.removeCue(removedCues[0]);
 
       // loop though and decrement ids
       for (let idIndex = i; idIndex < annotations.length; idIndex += 1) {
