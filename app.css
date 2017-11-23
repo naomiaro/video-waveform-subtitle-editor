@@ -7827,10 +7827,12 @@ body {
   background: white;
   color: #e62b1e;
   cursor: pointer;
+  width: 50px;
   height: 50px;
-  line-height: 30px;
-  padding: 10px;
-  border-radius: 5%; }
+  border-radius: 100%;
+  border: 1px solid #e62b1e;
+  cursor: pointer;
+  line-height: 50px; }
 
 .annotation-play-option {
   color: #e62b1e; }
