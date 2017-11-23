@@ -1,7 +1,6 @@
 $purple: #7f7fb5;
 $black: #000;
 $red: #e62b1e;
-$annotation-ctrl-height: 50px;
 $audio-ctrl-color: $purple;
 $audio-ctrl-color-stop: $red;
 $audio-ctrl-color-pause: orange;
@@ -159,14 +158,20 @@ body {
       }
 
       .annotation-id {
+        width: 30px;
+        text-align: right;
         line-height: 27px;
       }
 
       .annotation-start {
+        width: 90px;
+        text-align: right;
         line-height: 27px;
       }
 
       .annotation-end {
+        width: 90px;
+        text-align: right;
         line-height: 27px;
       }
 
@@ -202,7 +207,7 @@ body {
     .current {
       background: $black;
       .annotation-lines {
-        color: yellow;
+        color: orange;
       }
     }
   }

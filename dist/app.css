@@ -7767,10 +7767,16 @@ body {
       .playlist .annotations-text .annotation span:last-of-type {
         margin-right: 1.2rem; }
     .playlist .annotations-text .annotation .annotation-id {
+      width: 30px;
+      text-align: right;
       line-height: 27px; }
     .playlist .annotations-text .annotation .annotation-start {
+      width: 90px;
+      text-align: right;
       line-height: 27px; }
     .playlist .annotations-text .annotation .annotation-end {
+      width: 90px;
+      text-align: right;
       line-height: 27px; }
     .playlist .annotations-text .annotation .annotation-lines {
       flex-grow: 10;
@@ -7793,7 +7799,7 @@ body {
   .playlist .annotations-text .current {
     background: #000; }
     .playlist .annotations-text .current .annotation-lines {
-      color: yellow; }
+      color: orange; }
 
 .ted-media {
   text-align: center;
