@@ -1044,7 +1044,7 @@ var actions = [
 
 
 
-fetch('/Mogensen.srt')
+fetch('Mogensen.srt')
   .then((response) => {
     return response.text();
   })
