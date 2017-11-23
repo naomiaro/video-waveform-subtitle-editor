@@ -1039,11 +1039,13 @@ var actions = [
       // update text track cue
       captionTrack.removeCue(cueList[i]);
       const updatedCueOne = new VTTCue(annotation.start, annotation.end, annotation.lines.join('\n'));
-
       const annotationTwo = annotations[i + 1];
       const updatedCueTwo = new VTTCue(annotationTwo.start, annotationTwo.end, annotationTwo.lines.join('\n'));
       captionTrack.addCue(updatedCueOne);
       captionTrack.addCue(updatedCueTwo);
+
+      cueList[i] = updatedCueOne;
+      cueList.splice(i + 1, 0, updatedCueTwo);
 
       // loop though and increment ids
       for (let idIndex = i + 2; idIndex < annotations.length; idIndex += 1) {
@@ -1401,6 +1403,15 @@ fetch('Mogensen.srt')
       playlist.scrollTimer = setTimeout(() => {
         playlist.isScrolling = false;
       }, 200);
+    });
+
+    ee.on('annotationchange', (annotation, i, annotations, opts) => {
+      // update text track cue
+      const cue = cueList[i]
+      captionTrack.removeCue(cue);
+      const updatedCue = new VTTCue(annotation.start, annotation.end, annotation.lines.join('\n'));
+      cueList[i] = updatedCue;
+      captionTrack.addCue(updatedCue);
     });
 });
 
@@ -9523,6 +9534,7 @@ var AnnotationList = function () {
             // needed currently for references
             // eslint-disable-next-line no-param-reassign
             note.lines = e.target.innerText.split('\n');
+            _this4.playlist.ee.emit('annotationchange', note, i, _this4.annotations);
           },
           onkeypress: function onkeypress(e) {
             if (e.which === 13 || e.keyCode === 13) {
