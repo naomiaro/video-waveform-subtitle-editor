@@ -1023,7 +1023,7 @@ var actions = [
       const halfDuration = (annotation.end - annotation.start) / 2;
 
       annotations.splice(i + 1, 0, {
-        id: 'test',
+        id: i + 2,
         start: annotation.end - halfDuration,
         end: annotation.end,
         lines: ['----'],
@@ -1031,6 +1031,12 @@ var actions = [
       });
 
       annotation.end = annotation.start + halfDuration;
+
+      // loop though and increment ids
+      for (let idIndex = i + 2; idIndex < annotations.length; idIndex += 1) {
+        let annotation = annotations[idIndex];
+        annotation.id = idIndex + 1;
+      }
     }
   },
   {
