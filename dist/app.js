@@ -60,7 +60,7 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 23);
+/******/ 	return __webpack_require__(__webpack_require__.s = 22);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -202,7 +202,7 @@ function isThunk(t) {
 /* 8 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var h = __webpack_require__(47)
+var h = __webpack_require__(46)
 
 module.exports = h
 
@@ -214,7 +214,7 @@ module.exports = h
 "use strict";
 
 
-var _undefined = __webpack_require__(37)(); // Support ES3 engines
+var _undefined = __webpack_require__(36)(); // Support ES3 engines
 
 module.exports = function (val) {
  return (val !== _undefined) && (val !== null);
@@ -249,7 +249,7 @@ exports.FADEOUT = exports.FADEIN = exports.LOGARITHMIC = exports.EXPONENTIAL = e
 exports.createFadeIn = createFadeIn;
 exports.createFadeOut = createFadeOut;
 
-var _fadeCurves = __webpack_require__(22);
+var _fadeCurves = __webpack_require__(21);
 
 var SCURVE = exports.SCURVE = "sCurve";
 var LINEAR = exports.LINEAR = "linear";
@@ -340,659 +340,16 @@ function createFadeOut(gain, shape, start, duration) {
 
 /***/ }),
 /* 12 */
-/***/ (function(module, exports) {
-
-/**
- * lodash (Custom Build) <https://lodash.com/>
- * Build: `lodash modularize exports="npm" -o ./`
- * Copyright jQuery Foundation and other contributors <https://jquery.org/>
- * Released under MIT license <https://lodash.com/license>
- * Based on Underscore.js 1.8.3 <http://underscorejs.org/LICENSE>
- * Copyright Jeremy Ashkenas, DocumentCloud and Investigative Reporters & Editors
- */
-
-/** Used as references for various `Number` constants. */
-var MAX_SAFE_INTEGER = 9007199254740991;
-
-/** `Object#toString` result references. */
-var argsTag = '[object Arguments]',
-    funcTag = '[object Function]',
-    genTag = '[object GeneratorFunction]';
-
-/** Used to detect unsigned integer values. */
-var reIsUint = /^(?:0|[1-9]\d*)$/;
-
-/**
- * A faster alternative to `Function#apply`, this function invokes `func`
- * with the `this` binding of `thisArg` and the arguments of `args`.
- *
- * @private
- * @param {Function} func The function to invoke.
- * @param {*} thisArg The `this` binding of `func`.
- * @param {Array} args The arguments to invoke `func` with.
- * @returns {*} Returns the result of `func`.
- */
-function apply(func, thisArg, args) {
-  switch (args.length) {
-    case 0: return func.call(thisArg);
-    case 1: return func.call(thisArg, args[0]);
-    case 2: return func.call(thisArg, args[0], args[1]);
-    case 3: return func.call(thisArg, args[0], args[1], args[2]);
-  }
-  return func.apply(thisArg, args);
-}
-
-/**
- * The base implementation of `_.times` without support for iteratee shorthands
- * or max array length checks.
- *
- * @private
- * @param {number} n The number of times to invoke `iteratee`.
- * @param {Function} iteratee The function invoked per iteration.
- * @returns {Array} Returns the array of results.
- */
-function baseTimes(n, iteratee) {
-  var index = -1,
-      result = Array(n);
-
-  while (++index < n) {
-    result[index] = iteratee(index);
-  }
-  return result;
-}
-
-/**
- * Creates a unary function that invokes `func` with its argument transformed.
- *
- * @private
- * @param {Function} func The function to wrap.
- * @param {Function} transform The argument transform.
- * @returns {Function} Returns the new function.
- */
-function overArg(func, transform) {
-  return function(arg) {
-    return func(transform(arg));
-  };
-}
-
-/** Used for built-in method references. */
-var objectProto = Object.prototype;
-
-/** Used to check objects for own properties. */
-var hasOwnProperty = objectProto.hasOwnProperty;
-
-/**
- * Used to resolve the
- * [`toStringTag`](http://ecma-international.org/ecma-262/7.0/#sec-object.prototype.tostring)
- * of values.
- */
-var objectToString = objectProto.toString;
-
-/** Built-in value references. */
-var propertyIsEnumerable = objectProto.propertyIsEnumerable;
-
-/* Built-in method references for those with the same name as other `lodash` methods. */
-var nativeKeys = overArg(Object.keys, Object),
-    nativeMax = Math.max;
-
-/** Detect if properties shadowing those on `Object.prototype` are non-enumerable. */
-var nonEnumShadows = !propertyIsEnumerable.call({ 'valueOf': 1 }, 'valueOf');
-
-/**
- * Creates an array of the enumerable property names of the array-like `value`.
- *
- * @private
- * @param {*} value The value to query.
- * @param {boolean} inherited Specify returning inherited property names.
- * @returns {Array} Returns the array of property names.
- */
-function arrayLikeKeys(value, inherited) {
-  // Safari 8.1 makes `arguments.callee` enumerable in strict mode.
-  // Safari 9 makes `arguments.length` enumerable in strict mode.
-  var result = (isArray(value) || isArguments(value))
-    ? baseTimes(value.length, String)
-    : [];
-
-  var length = result.length,
-      skipIndexes = !!length;
-
-  for (var key in value) {
-    if ((inherited || hasOwnProperty.call(value, key)) &&
-        !(skipIndexes && (key == 'length' || isIndex(key, length)))) {
-      result.push(key);
-    }
-  }
-  return result;
-}
-
-/**
- * Assigns `value` to `key` of `object` if the existing value is not equivalent
- * using [`SameValueZero`](http://ecma-international.org/ecma-262/7.0/#sec-samevaluezero)
- * for equality comparisons.
- *
- * @private
- * @param {Object} object The object to modify.
- * @param {string} key The key of the property to assign.
- * @param {*} value The value to assign.
- */
-function assignValue(object, key, value) {
-  var objValue = object[key];
-  if (!(hasOwnProperty.call(object, key) && eq(objValue, value)) ||
-      (value === undefined && !(key in object))) {
-    object[key] = value;
-  }
-}
-
-/**
- * The base implementation of `_.keys` which doesn't treat sparse arrays as dense.
- *
- * @private
- * @param {Object} object The object to query.
- * @returns {Array} Returns the array of property names.
- */
-function baseKeys(object) {
-  if (!isPrototype(object)) {
-    return nativeKeys(object);
-  }
-  var result = [];
-  for (var key in Object(object)) {
-    if (hasOwnProperty.call(object, key) && key != 'constructor') {
-      result.push(key);
-    }
-  }
-  return result;
-}
-
-/**
- * The base implementation of `_.rest` which doesn't validate or coerce arguments.
- *
- * @private
- * @param {Function} func The function to apply a rest parameter to.
- * @param {number} [start=func.length-1] The start position of the rest parameter.
- * @returns {Function} Returns the new function.
- */
-function baseRest(func, start) {
-  start = nativeMax(start === undefined ? (func.length - 1) : start, 0);
-  return function() {
-    var args = arguments,
-        index = -1,
-        length = nativeMax(args.length - start, 0),
-        array = Array(length);
-
-    while (++index < length) {
-      array[index] = args[start + index];
-    }
-    index = -1;
-    var otherArgs = Array(start + 1);
-    while (++index < start) {
-      otherArgs[index] = args[index];
-    }
-    otherArgs[start] = array;
-    return apply(func, this, otherArgs);
-  };
-}
-
-/**
- * Copies properties of `source` to `object`.
- *
- * @private
- * @param {Object} source The object to copy properties from.
- * @param {Array} props The property identifiers to copy.
- * @param {Object} [object={}] The object to copy properties to.
- * @param {Function} [customizer] The function to customize copied values.
- * @returns {Object} Returns `object`.
- */
-function copyObject(source, props, object, customizer) {
-  object || (object = {});
-
-  var index = -1,
-      length = props.length;
-
-  while (++index < length) {
-    var key = props[index];
-
-    var newValue = customizer
-      ? customizer(object[key], source[key], key, object, source)
-      : undefined;
-
-    assignValue(object, key, newValue === undefined ? source[key] : newValue);
-  }
-  return object;
-}
-
-/**
- * Creates a function like `_.assign`.
- *
- * @private
- * @param {Function} assigner The function to assign values.
- * @returns {Function} Returns the new assigner function.
- */
-function createAssigner(assigner) {
-  return baseRest(function(object, sources) {
-    var index = -1,
-        length = sources.length,
-        customizer = length > 1 ? sources[length - 1] : undefined,
-        guard = length > 2 ? sources[2] : undefined;
-
-    customizer = (assigner.length > 3 && typeof customizer == 'function')
-      ? (length--, customizer)
-      : undefined;
-
-    if (guard && isIterateeCall(sources[0], sources[1], guard)) {
-      customizer = length < 3 ? undefined : customizer;
-      length = 1;
-    }
-    object = Object(object);
-    while (++index < length) {
-      var source = sources[index];
-      if (source) {
-        assigner(object, source, index, customizer);
-      }
-    }
-    return object;
-  });
-}
-
-/**
- * Checks if `value` is a valid array-like index.
- *
- * @private
- * @param {*} value The value to check.
- * @param {number} [length=MAX_SAFE_INTEGER] The upper bounds of a valid index.
- * @returns {boolean} Returns `true` if `value` is a valid index, else `false`.
- */
-function isIndex(value, length) {
-  length = length == null ? MAX_SAFE_INTEGER : length;
-  return !!length &&
-    (typeof value == 'number' || reIsUint.test(value)) &&
-    (value > -1 && value % 1 == 0 && value < length);
-}
-
-/**
- * Checks if the given arguments are from an iteratee call.
- *
- * @private
- * @param {*} value The potential iteratee value argument.
- * @param {*} index The potential iteratee index or key argument.
- * @param {*} object The potential iteratee object argument.
- * @returns {boolean} Returns `true` if the arguments are from an iteratee call,
- *  else `false`.
- */
-function isIterateeCall(value, index, object) {
-  if (!isObject(object)) {
-    return false;
-  }
-  var type = typeof index;
-  if (type == 'number'
-        ? (isArrayLike(object) && isIndex(index, object.length))
-        : (type == 'string' && index in object)
-      ) {
-    return eq(object[index], value);
-  }
-  return false;
-}
-
-/**
- * Checks if `value` is likely a prototype object.
- *
- * @private
- * @param {*} value The value to check.
- * @returns {boolean} Returns `true` if `value` is a prototype, else `false`.
- */
-function isPrototype(value) {
-  var Ctor = value && value.constructor,
-      proto = (typeof Ctor == 'function' && Ctor.prototype) || objectProto;
-
-  return value === proto;
-}
-
-/**
- * Performs a
- * [`SameValueZero`](http://ecma-international.org/ecma-262/7.0/#sec-samevaluezero)
- * comparison between two values to determine if they are equivalent.
- *
- * @static
- * @memberOf _
- * @since 4.0.0
- * @category Lang
- * @param {*} value The value to compare.
- * @param {*} other The other value to compare.
- * @returns {boolean} Returns `true` if the values are equivalent, else `false`.
- * @example
- *
- * var object = { 'a': 1 };
- * var other = { 'a': 1 };
- *
- * _.eq(object, object);
- * // => true
- *
- * _.eq(object, other);
- * // => false
- *
- * _.eq('a', 'a');
- * // => true
- *
- * _.eq('a', Object('a'));
- * // => false
- *
- * _.eq(NaN, NaN);
- * // => true
- */
-function eq(value, other) {
-  return value === other || (value !== value && other !== other);
-}
-
-/**
- * Checks if `value` is likely an `arguments` object.
- *
- * @static
- * @memberOf _
- * @since 0.1.0
- * @category Lang
- * @param {*} value The value to check.
- * @returns {boolean} Returns `true` if `value` is an `arguments` object,
- *  else `false`.
- * @example
- *
- * _.isArguments(function() { return arguments; }());
- * // => true
- *
- * _.isArguments([1, 2, 3]);
- * // => false
- */
-function isArguments(value) {
-  // Safari 8.1 makes `arguments.callee` enumerable in strict mode.
-  return isArrayLikeObject(value) && hasOwnProperty.call(value, 'callee') &&
-    (!propertyIsEnumerable.call(value, 'callee') || objectToString.call(value) == argsTag);
-}
-
-/**
- * Checks if `value` is classified as an `Array` object.
- *
- * @static
- * @memberOf _
- * @since 0.1.0
- * @category Lang
- * @param {*} value The value to check.
- * @returns {boolean} Returns `true` if `value` is an array, else `false`.
- * @example
- *
- * _.isArray([1, 2, 3]);
- * // => true
- *
- * _.isArray(document.body.children);
- * // => false
- *
- * _.isArray('abc');
- * // => false
- *
- * _.isArray(_.noop);
- * // => false
- */
-var isArray = Array.isArray;
-
-/**
- * Checks if `value` is array-like. A value is considered array-like if it's
- * not a function and has a `value.length` that's an integer greater than or
- * equal to `0` and less than or equal to `Number.MAX_SAFE_INTEGER`.
- *
- * @static
- * @memberOf _
- * @since 4.0.0
- * @category Lang
- * @param {*} value The value to check.
- * @returns {boolean} Returns `true` if `value` is array-like, else `false`.
- * @example
- *
- * _.isArrayLike([1, 2, 3]);
- * // => true
- *
- * _.isArrayLike(document.body.children);
- * // => true
- *
- * _.isArrayLike('abc');
- * // => true
- *
- * _.isArrayLike(_.noop);
- * // => false
- */
-function isArrayLike(value) {
-  return value != null && isLength(value.length) && !isFunction(value);
-}
-
-/**
- * This method is like `_.isArrayLike` except that it also checks if `value`
- * is an object.
- *
- * @static
- * @memberOf _
- * @since 4.0.0
- * @category Lang
- * @param {*} value The value to check.
- * @returns {boolean} Returns `true` if `value` is an array-like object,
- *  else `false`.
- * @example
- *
- * _.isArrayLikeObject([1, 2, 3]);
- * // => true
- *
- * _.isArrayLikeObject(document.body.children);
- * // => true
- *
- * _.isArrayLikeObject('abc');
- * // => false
- *
- * _.isArrayLikeObject(_.noop);
- * // => false
- */
-function isArrayLikeObject(value) {
-  return isObjectLike(value) && isArrayLike(value);
-}
-
-/**
- * Checks if `value` is classified as a `Function` object.
- *
- * @static
- * @memberOf _
- * @since 0.1.0
- * @category Lang
- * @param {*} value The value to check.
- * @returns {boolean} Returns `true` if `value` is a function, else `false`.
- * @example
- *
- * _.isFunction(_);
- * // => true
- *
- * _.isFunction(/abc/);
- * // => false
- */
-function isFunction(value) {
-  // The use of `Object#toString` avoids issues with the `typeof` operator
-  // in Safari 8-9 which returns 'object' for typed array and other constructors.
-  var tag = isObject(value) ? objectToString.call(value) : '';
-  return tag == funcTag || tag == genTag;
-}
-
-/**
- * Checks if `value` is a valid array-like length.
- *
- * **Note:** This method is loosely based on
- * [`ToLength`](http://ecma-international.org/ecma-262/7.0/#sec-tolength).
- *
- * @static
- * @memberOf _
- * @since 4.0.0
- * @category Lang
- * @param {*} value The value to check.
- * @returns {boolean} Returns `true` if `value` is a valid length, else `false`.
- * @example
- *
- * _.isLength(3);
- * // => true
- *
- * _.isLength(Number.MIN_VALUE);
- * // => false
- *
- * _.isLength(Infinity);
- * // => false
- *
- * _.isLength('3');
- * // => false
- */
-function isLength(value) {
-  return typeof value == 'number' &&
-    value > -1 && value % 1 == 0 && value <= MAX_SAFE_INTEGER;
-}
-
-/**
- * Checks if `value` is the
- * [language type](http://www.ecma-international.org/ecma-262/7.0/#sec-ecmascript-language-types)
- * of `Object`. (e.g. arrays, functions, objects, regexes, `new Number(0)`, and `new String('')`)
- *
- * @static
- * @memberOf _
- * @since 0.1.0
- * @category Lang
- * @param {*} value The value to check.
- * @returns {boolean} Returns `true` if `value` is an object, else `false`.
- * @example
- *
- * _.isObject({});
- * // => true
- *
- * _.isObject([1, 2, 3]);
- * // => true
- *
- * _.isObject(_.noop);
- * // => true
- *
- * _.isObject(null);
- * // => false
- */
-function isObject(value) {
-  var type = typeof value;
-  return !!value && (type == 'object' || type == 'function');
-}
-
-/**
- * Checks if `value` is object-like. A value is object-like if it's not `null`
- * and has a `typeof` result of "object".
- *
- * @static
- * @memberOf _
- * @since 4.0.0
- * @category Lang
- * @param {*} value The value to check.
- * @returns {boolean} Returns `true` if `value` is object-like, else `false`.
- * @example
- *
- * _.isObjectLike({});
- * // => true
- *
- * _.isObjectLike([1, 2, 3]);
- * // => true
- *
- * _.isObjectLike(_.noop);
- * // => false
- *
- * _.isObjectLike(null);
- * // => false
- */
-function isObjectLike(value) {
-  return !!value && typeof value == 'object';
-}
-
-/**
- * Assigns own enumerable string keyed properties of source objects to the
- * destination object. Source objects are applied from left to right.
- * Subsequent sources overwrite property assignments of previous sources.
- *
- * **Note:** This method mutates `object` and is loosely based on
- * [`Object.assign`](https://mdn.io/Object/assign).
- *
- * @static
- * @memberOf _
- * @since 0.10.0
- * @category Object
- * @param {Object} object The destination object.
- * @param {...Object} [sources] The source objects.
- * @returns {Object} Returns `object`.
- * @see _.assignIn
- * @example
- *
- * function Foo() {
- *   this.a = 1;
- * }
- *
- * function Bar() {
- *   this.c = 3;
- * }
- *
- * Foo.prototype.b = 2;
- * Bar.prototype.d = 4;
- *
- * _.assign({ 'a': 0 }, new Foo, new Bar);
- * // => { 'a': 1, 'c': 3 }
- */
-var assign = createAssigner(function(object, source) {
-  if (nonEnumShadows || isPrototype(source) || isArrayLike(source)) {
-    copyObject(source, keys(source), object);
-    return;
-  }
-  for (var key in source) {
-    if (hasOwnProperty.call(source, key)) {
-      assignValue(object, key, source[key]);
-    }
-  }
-});
-
-/**
- * Creates an array of the own enumerable property names of `object`.
- *
- * **Note:** Non-object values are coerced to objects. See the
- * [ES spec](http://ecma-international.org/ecma-262/7.0/#sec-object.keys)
- * for more details.
- *
- * @static
- * @since 0.1.0
- * @memberOf _
- * @category Object
- * @param {Object} object The object to query.
- * @returns {Array} Returns the array of property names.
- * @example
- *
- * function Foo() {
- *   this.a = 1;
- *   this.b = 2;
- * }
- *
- * Foo.prototype.c = 3;
- *
- * _.keys(new Foo);
- * // => ['a', 'b'] (iteration order is not guaranteed)
- *
- * _.keys('hi');
- * // => ['0', '1']
- */
-function keys(object) {
-  return isArrayLike(object) ? arrayLikeKeys(object) : baseKeys(object);
-}
-
-module.exports = assign;
-
-
-/***/ }),
-/* 13 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var document = __webpack_require__(14)
+var document = __webpack_require__(13)
 
-var applyProperties = __webpack_require__(15)
+var applyProperties = __webpack_require__(14)
 
 var isVNode = __webpack_require__(2)
 var isVText = __webpack_require__(6)
 var isWidget = __webpack_require__(1)
-var handleThunk = __webpack_require__(17)
+var handleThunk = __webpack_require__(16)
 
 module.exports = createElement
 
@@ -1034,12 +391,12 @@ function createElement(vnode, opts) {
 
 
 /***/ }),
-/* 14 */
+/* 13 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /* WEBPACK VAR INJECTION */(function(global) {var topLevel = typeof global !== 'undefined' ? global :
     typeof window !== 'undefined' ? window : {}
-var minDoc = __webpack_require__(29);
+var minDoc = __webpack_require__(28);
 
 var doccy;
 
@@ -1058,10 +415,10 @@ module.exports = doccy;
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(4)))
 
 /***/ }),
-/* 15 */
+/* 14 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var isObject = __webpack_require__(16)
+var isObject = __webpack_require__(15)
 var isHook = __webpack_require__(5)
 
 module.exports = applyProperties
@@ -1161,7 +518,7 @@ function getPrototype(value) {
 
 
 /***/ }),
-/* 16 */
+/* 15 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1173,7 +530,7 @@ module.exports = function isObject(x) {
 
 
 /***/ }),
-/* 17 */
+/* 16 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var isVNode = __webpack_require__(2)
@@ -1219,14 +576,14 @@ function renderThunk(thunk, previous) {
 
 
 /***/ }),
-/* 18 */
+/* 17 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-var d        = __webpack_require__(30)
-  , callable = __webpack_require__(44)
+var d        = __webpack_require__(29)
+  , callable = __webpack_require__(43)
 
   , apply = Function.prototype.apply, call = Function.prototype.call
   , create = Object.create, defineProperty = Object.defineProperty
@@ -1358,7 +715,7 @@ exports.methods = methods;
 
 
 /***/ }),
-/* 19 */
+/* 18 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var version = __webpack_require__(3)
@@ -1386,7 +743,7 @@ VirtualPatch.prototype.type = "VirtualPatch"
 
 
 /***/ }),
-/* 20 */
+/* 19 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1399,7 +756,7 @@ exports.STATE_FINISHED = exports.STATE_DECODING = exports.STATE_LOADING = export
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var _eventEmitter = __webpack_require__(18);
+var _eventEmitter = __webpack_require__(17);
 
 var _eventEmitter2 = _interopRequireDefault(_eventEmitter);
 
@@ -1473,7 +830,7 @@ var _class = function () {
 exports.default = _class;
 
 /***/ }),
-/* 21 */
+/* 20 */
 /***/ (function(module, exports, __webpack_require__) {
 
 //     uuid.js
@@ -1662,7 +1019,7 @@ module.exports = uuid;
 
 
 /***/ }),
-/* 22 */
+/* 21 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1743,167 +1100,27 @@ function logarithmic(length, base, rotation) {
 
 
 /***/ }),
-/* 23 */
+/* 22 */
 /***/ (function(module, exports, __webpack_require__) {
+
+const srtParser = __webpack_require__(23);
 
 __webpack_require__(24);
 __webpack_require__(25);
 __webpack_require__(26);
 
-var WaveformPlaylist = __webpack_require__(27);
+const createElement = __webpack_require__(27);
+const EventEmitter = __webpack_require__(17);
+const Playlist = __webpack_require__(44);
 
-var notes = [
-  {
-   "begin": "0.000", 
-   "children": [], 
-   "end": "2.680", 
-   "id": "f000001", 
-   "language": "eng", 
-   "lines": [
-    "1"
-   ]
-  }, 
-  {
-   "begin": "2.680", 
-   "children": [], 
-   "end": "5.880", 
-   "id": "f000002", 
-   "language": "eng", 
-   "lines": [
-    "From fairest creatures we desire increase,"
-   ]
-  }, 
-  {
-   "begin": "5.880", 
-   "children": [], 
-   "end": "9.240", 
-   "id": "f000003", 
-   "language": "eng", 
-   "lines": [
-    "That thereby beauty's rose might never die,"
-   ]
-  }, 
-  {
-   "begin": "9.240", 
-   "children": [], 
-   "end": "11.920", 
-   "id": "f000004", 
-   "language": "eng", 
-   "lines": [
-    "But as the riper should by time decease,"
-   ]
-  }, 
-  {
-   "begin": "11.920", 
-   "children": [], 
-   "end": "15.280", 
-   "id": "f000005", 
-   "language": "eng", 
-   "lines": [
-    "His tender heir might bear his memory:"
-   ]
-  }, 
-  {
-   "begin": "15.280", 
-   "children": [], 
-   "end": "18.600", 
-   "id": "f000006", 
-   "language": "eng", 
-   "lines": [
-    "But thou contracted to thine own bright eyes,"
-   ]
-  }, 
-  {
-   "begin": "18.600", 
-   "children": [], 
-   "end": "22.800", 
-   "id": "f000007", 
-   "language": "eng", 
-   "lines": [
-    "Feed'st thy light's flame with self-substantial fuel,"
-   ]
-  }, 
-  {
-   "begin": "22.800", 
-   "children": [], 
-   "end": "25.680", 
-   "id": "f000008", 
-   "language": "eng", 
-   "lines": [
-    "Making a famine where abundance lies,"
-   ]
-  }, 
-  {
-   "begin": "25.680", 
-   "children": [], 
-   "end": "31.240", 
-   "id": "f000009", 
-   "language": "eng", 
-   "lines": [
-    "Thy self thy foe, to thy sweet self too cruel:"
-   ]
-  }, 
-  {
-   "begin": "31.240", 
-   "children": [], 
-   "end": "34.280", 
-   "id": "f000010", 
-   "language": "eng", 
-   "lines": [
-    "Thou that art now the world's fresh ornament,"
-   ]
-  }, 
-  {
-   "begin": "34.280", 
-   "children": [], 
-   "end": "36.960", 
-   "id": "f000011", 
-   "language": "eng", 
-   "lines": [
-    "And only herald to the gaudy spring,"
-   ]
-  }, 
-  {
-   "begin": "36.960", 
-   "children": [], 
-   "end": "40.680", 
-   "id": "f000012", 
-   "language": "eng", 
-   "lines": [
-    "Within thine own bud buriest thy content,"
-   ]
-  }, 
-  {
-   "begin": "40.680", 
-   "children": [], 
-   "end": "44.560", 
-   "id": "f000013", 
-   "language": "eng", 
-   "lines": [
-    "And tender churl mak'st waste in niggarding:"
-   ]
-  }, 
-  {
-   "begin": "44.560", 
-   "children": [], 
-   "end": "48.080", 
-   "id": "f000014", 
-   "language": "eng", 
-   "lines": [
-    "Pity the world, or else this glutton be,"
-   ]
-  }, 
-  {
-   "begin": "48.080", 
-   "children": [], 
-   "end": "53.240", 
-   "id": "f000015", 
-   "language": "eng", 
-   "lines": [
-    "To eat the world's due, by the grave and thee."
-   ]
-  }
-];
+window.OfflineAudioContext = window.OfflineAudioContext || window.webkitOfflineAudioContext;
+window.AudioContext = window.AudioContext || window.webkitAudioContext;
+const audioContext = new window.AudioContext();
+
+const video = document.getElementById('video');
+const captionTrack = video.addTextTrack("captions", "English", "en");
+captionTrack.mode = "showing";
+const cueList = [];
 
 var actions = [
   {
@@ -1960,430 +1177,459 @@ var actions = [
   }
 ];
 
-var playlist = WaveformPlaylist.init({
-  container: document.getElementById("playlist"),
-  timescale: true,
-  state: 'select',
-  samplesPerPixel: 4096,
-  colors: {
-    waveOutlineColor: '#E0EFF1',
-    timeColor: 'grey',
-    fadeColor: 'black'
-  },
-  annotationList: {
-    annotations: notes,
-    controls: actions,
-    editable: true,
-    isContinuousPlay: false,
-    linkEndpoints: true
-  }
-});
 
-playlist.load([
-  {
-    src: "251.ogg"
-  }
-]).then(function() {
-  //can do stuff with the playlist.
-});
 
-
-// START EVENTS COPY
-
-/*
- * This script is provided to give an example how the playlist can be controlled using the event emitter.
- * This enables projects to create/control the useability of the project.
-*/
-var ee = playlist.getEventEmitter();
-var $container = $("body");
-var $timeFormat = $container.find('.time-format');
-var $audioStart = $container.find('.audio-start');
-var $audioEnd = $container.find('.audio-end');
-var $time = $container.find('.audio-pos');
-
-var format = "hh:mm:ss.uuu";
-var startTime = 0;
-var endTime = 0;
-var audioPos = 0;
-var downloadUrl = undefined;
-var isLooping = false;
-var playoutPromises;
-
-var video = document.getElementById('video');
-
-function toggleActive(node) {
-  var active = node.parentNode.querySelectorAll('.active');
-  var i = 0, len = active.length;
-
-  for (; i < len; i++) {
-    active[i].classList.remove('active');
-  }
-
-  node.classList.toggle('active');
-}
-
-function cueFormatters(format) {
-
-  function clockFormat(seconds, decimals) {
-    var hours,
-        minutes,
-        secs,
-        result;
-
-    hours = parseInt(seconds / 3600, 10) % 24;
-    minutes = parseInt(seconds / 60, 10) % 60;
-    secs = seconds % 60;
-    secs = secs.toFixed(decimals);
-
-    result = (hours < 10 ? "0" + hours : hours) + ":" + (minutes < 10 ? "0" + minutes : minutes) + ":" + (secs < 10 ? "0" + secs : secs);
-
-    return result;
-  }
-
-  var formats = {
-    "seconds": function (seconds) {
-        return seconds.toFixed(0);
-    },
-    "thousandths": function (seconds) {
-        return seconds.toFixed(3);
-    },
-    "hh:mm:ss": function (seconds) {
-        return clockFormat(seconds, 0);   
-    },
-    "hh:mm:ss.u": function (seconds) {
-        return clockFormat(seconds, 1);   
-    },
-    "hh:mm:ss.uu": function (seconds) {
-        return clockFormat(seconds, 2);   
-    },
-    "hh:mm:ss.uuu": function (seconds) {
-        return clockFormat(seconds, 3);   
-    }
-  };
-
-  return formats[format];
-}
-
-function updateSelect(start, end) {
-  if (start < end) {
-    $('.btn-trim-audio').removeClass('disabled');
-    $('.btn-loop').removeClass('disabled');
-  }
-  else {
-    $('.btn-trim-audio').addClass('disabled');
-    $('.btn-loop').addClass('disabled');
-  }
-
-  $audioStart.val(cueFormatters(format)(start));
-  $audioEnd.val(cueFormatters(format)(end));
-
-  startTime = start;
-  endTime = end;
-}
-
-function updateTime(time) {
-  $time.html(cueFormatters(format)(time));
-
-  audioPos = time;
-}
-
-updateSelect(startTime, endTime);
-updateTime(audioPos);
-
-
-
-/*
-* Code below sets up events to send messages to the playlist.
-*/
-// $container.on("click", ".btn-playlist-state-group", function() {
-//   //reset these for now.
-//   $('.btn-fade-state-group').addClass('hidden');
-//   $('.btn-select-state-group').addClass('hidden');
-
-//   if ($('.btn-select').hasClass('active')) {
-//     $('.btn-select-state-group').removeClass('hidden');
-//   }
-
-//   if ($('.btn-fadein').hasClass('active') || $('.btn-fadeout').hasClass('active')) {
-//     $('.btn-fade-state-group').removeClass('hidden');
-//   }
-// });
-
-$container.on("click", ".btn-annotations-download", function() {
-  ee.emit("annotationsrequest");
-});
-
-$container.on("click", ".btn-loop", function() {
-  isLooping = true;
-  playoutPromises = playlist.play(startTime, endTime);
-});
-
-$container.on("click", ".btn-play", function() {
-  ee.emit("play");
-  video.play();
-});
-
-$container.on("click", ".btn-pause", function() {
-  isLooping = false;
-  ee.emit("pause");
-  video.pause();
-});
-
-$container.on("click", ".btn-stop", function() {
-  isLooping = false;
-  ee.emit("stop");
-});
-
-$container.on("click", ".btn-rewind", function() {
-  isLooping = false;
-  ee.emit("rewind");
-});
-
-$container.on("click", ".btn-fast-forward", function() {
-  isLooping = false;
-  ee.emit("fastforward");
-});
-
-$container.on("click", ".btn-clear", function() {
-  isLooping = false;
-  ee.emit("clear");
-});
-
-$container.on("click", ".btn-record", function() {
-  ee.emit("record");
-});
-
-//track interaction states
-$container.on("click", ".btn-cursor", function() {
-  ee.emit("statechange", "cursor");
-  toggleActive(this);
-});
-
-$container.on("click", ".btn-select", function() {
-  ee.emit("statechange", "select");
-  toggleActive(this);
-});
-
-$container.on("click", ".btn-shift", function() {
-  ee.emit("statechange", "shift");
-  toggleActive(this);
-});
-
-$container.on("click", ".btn-fadein", function() {
-  ee.emit("statechange", "fadein");
-  toggleActive(this);
-});
-
-$container.on("click", ".btn-fadeout", function() {
-  ee.emit("statechange", "fadeout");
-  toggleActive(this);
-});
-
-//fade types
-$container.on("click", ".btn-logarithmic", function() {
-  ee.emit("fadetype", "logarithmic");
-  toggleActive(this);
-});
-
-$container.on("click", ".btn-linear", function() {
-  ee.emit("fadetype", "linear");
-  toggleActive(this);
-});
-
-$container.on("click", ".btn-scurve", function() {
-  ee.emit("fadetype", "sCurve");
-  toggleActive(this);
-});
-
-$container.on("click", ".btn-exponential", function() {
-  ee.emit("fadetype", "exponential");
-  toggleActive(this);
-});
-
-//zoom buttons
-$container.on("click", ".btn-zoom-in", function() {
-  ee.emit("zoomin");
-});
-
-$container.on("click", ".btn-zoom-out", function() {
-  ee.emit("zoomout");
-});
-
-$container.on("click", ".btn-trim-audio", function() {
-  ee.emit("trim");
-});
-
-$container.on("click", ".btn-info", function() {
-  console.log(playlist.getInfo());
-});
-
-$container.on("click", ".btn-download", function () {
-  ee.emit('startaudiorendering', 'wav');
-});
-
-$container.on("click", ".btn-seektotime", function () {
-  var time = parseInt(document.getElementById("seektime").value, 10);
-  ee.emit("select", time, time);
-});
-
-$container.on("change", ".select-seek-style", function (node) {
-  playlist.setSeekStyle(node.target.value);
-});
-
-//track drop
-$container.on("dragenter", ".track-drop", function(e) {
-  e.preventDefault();
-  e.target.classList.add("drag-enter");
-});
-
-$container.on("dragover", ".track-drop", function(e) {
-  e.preventDefault();
-});
-
-$container.on("dragleave", ".track-drop", function(e) {
-  e.preventDefault();
-  e.target.classList.remove("drag-enter");
-});
-
-$container.on("drop", ".track-drop", function(e) {
-  e.preventDefault();
-  e.target.classList.remove("drag-enter");
-
-  var dropEvent = e.originalEvent;
-
-  for (var i = 0; i < dropEvent.dataTransfer.files.length; i++) {
-    ee.emit("newtrack", dropEvent.dataTransfer.files[i]);
-  }
-});
-
-$container.on("change", ".time-format", function(e) {
-  format = $timeFormat.val();
-  ee.emit("durationformat", format);
-
-  updateSelect(startTime, endTime);
-  updateTime(audioPos);
-});
-
-$container.on("input change", ".master-gain", function(e){
-  ee.emit("mastervolumechange", e.target.value);
-});
-
-$container.on("change", ".continuous-play", function(e){
-  ee.emit("continuousplay", $(e.target).is(':checked'));
-});
-
-$container.on("change", ".link-endpoints", function(e){
-  ee.emit("linkendpoints", $(e.target).is(':checked'));
-});
-
-$container.on("change", ".automatic-scroll", function(e){
-  ee.emit("automaticscroll", $(e.target).is(':checked'));
-});
-
-function displaySoundStatus(status) {
-  $(".sound-status").html(status);
-}
-
-function displayLoadingData(data) {
-  var info = $("<div/>").append(data);
-  $(".loading-data").append(info);
-}
-
-function displayDownloadLink(link) {
-  var dateString = (new Date()).toISOString();
-  var $link = $("<a/>", {
-    'href': link,
-    'download': 'waveformplaylist' + dateString + '.wav',
-    'text': 'Download mix ' + dateString,
-    'class': 'btn btn-small btn-download-link'
-  });
-
-  $('.btn-download-link').remove();
-  $('.btn-download').after($link);
-}
-
-
-/*
-* Code below receives updates from the playlist.
-*/
-ee.on("select", updateSelect);
-
-ee.on("timeupdate", updateTime);
-
-ee.on("mute", function(track) {
-  displaySoundStatus("Mute button pressed for " + track.name);
-});
-
-ee.on("solo", function(track) {
-  displaySoundStatus("Solo button pressed for " + track.name);
-});
-
-ee.on("volumechange", function(volume, track) {
-  displaySoundStatus(track.name + " now has volume " + volume + ".");
-});
-
-ee.on("mastervolumechange", function(volume) {
-  displaySoundStatus("Master volume now has volume " + volume + ".");
-});
-
-
-var audioStates = ["uninitialized", "loading", "decoding", "finished"];
-
-ee.on("audiorequeststatechange", function(state, src) {
-  var name = src;
-
-  if (src instanceof File) {
-    name = src.name;
-  }
-
-  displayLoadingData("Track " + name + " is in state " + audioStates[state]);
-});
-
-ee.on("loadprogress", function(percent, src) {
-  var name = src;
-
-  if (src instanceof File) {
-    name = src.name;
-  }
-
-  displayLoadingData("Track " + name + " has loaded " + percent + "%");
-});
-
-ee.on("audiosourcesloaded", function() {
-  displayLoadingData("Tracks have all finished decoding.");
-});
-
-ee.on("audiosourcesrendered", function() {
-  displayLoadingData("Tracks have been rendered");
-});
-
-ee.on('audiorenderingfinished', function (type, data) {
-  if (type == 'wav'){
-    if (downloadUrl) {
-      window.URL.revokeObjectURL(downloadUrl);
-    }
-
-    downloadUrl = window.URL.createObjectURL(data);
-    displayDownloadLink(downloadUrl);
-  }
-});
-
-ee.on('finished', function () {
-  console.log("The cursor has reached the end of the selection !");
-
-  if (isLooping) {
-    playoutPromises.then(function() {
-      playoutPromises = playlist.play(startTime, endTime);
+fetch('/Mogensen.srt')
+  .then((response) => {
+    return response.text();
+  })
+  .then((srt) => {
+    const subtitleData = srtParser.fromSrt(srt, true);
+    const annotations = subtitleData.map((subtitle) => {
+      const startSec = subtitle.startTime / 1000;
+      const endSec = subtitle.endTime / 1000;
+      const cue = new VTTCue(startSec, endSec, subtitle.text);
+      cueList.push(cue);
+      captionTrack.addCue(cue);
+
+      return {
+        id: subtitle.id,
+        begin: startSec,
+        end: endSec,
+        lines: subtitle.text.split('\n')
+      };
     });
-  }
+
+    const playlist = new Playlist.default();
+    playlist.setSampleRate(audioContext.sampleRate);
+    playlist.setSamplesPerPixel(1500);
+    playlist.setAudioContext(audioContext);
+    playlist.setEventEmitter(EventEmitter());
+    playlist.setTimeSelection(0, 0);
+    playlist.setDurationFormat('hh:mm:ss.u');
+    playlist.setState('cursor');
+    playlist.setControlOptions({
+        show: false,
+        width: 150,
+    });
+    playlist.setWaveHeight(96);
+    playlist.setColors({
+      waveOutlineColor: '#000',
+      timeColor: 'grey',
+      fadeColor: 'black'
+    });
+    playlist.setZoomLevels([1200, 1500, 1800]);
+    playlist.setZoomIndex(1);
+    playlist.setMono(true);
+    playlist.setExclSolo(false);
+    playlist.setShowTimeScale(true);
+    playlist.setSeekStyle('line');
+    playlist.setAnnotations({
+      annotations: annotations,
+      controls: actions,
+      editable: true,
+      isContinuousPlay: false,
+      linkEndpoints: false
+    });
+    playlist.setIsAutomaticScroll(true);
+
+    // take care of initial virtual dom rendering.
+    const tree = playlist.render();
+    const rootNode = createElement(tree);
+    const container = document.getElementById("playlist");
+
+    container.appendChild(rootNode);
+    playlist.tree = tree;
+    playlist.rootNode = rootNode;
+
+    playlist.load([
+      {
+        src: "251.ogg"
+      }
+    ]).then(function() {
+      //can do stuff with the playlist.
+    });
+
+    // START EVENTS COPY
+
+    /*
+     * This script is provided to give an example how the playlist can be controlled using the event emitter.
+     * This enables projects to create/control the useability of the project.
+    */
+    var ee = playlist.getEventEmitter();
+    var $container = $("body");
+    var $timeFormat = $container.find('.time-format');
+    var $audioStart = $container.find('.audio-start');
+    var $audioEnd = $container.find('.audio-end');
+    var $time = $container.find('.audio-pos');
+
+    var format = "hh:mm:ss.uuu";
+    var startTime = 0;
+    var endTime = 0;
+    var audioPos = 0;
+    var playoutPromises;
+    var stopVideoAt;
+
+    video.addEventListener('timeupdate', () => {
+      if (stopVideoAt && stopVideoAt < video.currentTime) {
+        video.pause();
+      }
+    });
+
+    function cueFormatters(format) {
+
+      function clockFormat(seconds, decimals) {
+        var hours,
+            minutes,
+            secs,
+            result;
+
+        hours = parseInt(seconds / 3600, 10) % 24;
+        minutes = parseInt(seconds / 60, 10) % 60;
+        secs = seconds % 60;
+        secs = secs.toFixed(decimals);
+
+        result = (hours < 10 ? "0" + hours : hours) + ":" + (minutes < 10 ? "0" + minutes : minutes) + ":" + (secs < 10 ? "0" + secs : secs);
+
+        return result;
+      }
+
+      var formats = {
+        "seconds": function (seconds) {
+            return seconds.toFixed(0);
+        },
+        "thousandths": function (seconds) {
+            return seconds.toFixed(3);
+        },
+        "hh:mm:ss": function (seconds) {
+            return clockFormat(seconds, 0);   
+        },
+        "hh:mm:ss.u": function (seconds) {
+            return clockFormat(seconds, 1);   
+        },
+        "hh:mm:ss.uu": function (seconds) {
+            return clockFormat(seconds, 2);   
+        },
+        "hh:mm:ss.uuu": function (seconds) {
+            return clockFormat(seconds, 3);   
+        }
+      };
+
+      return formats[format];
+    }
+
+    function updateSelect(start, end) {
+      if (start < end) {
+        $('.btn-trim-audio').removeClass('disabled');
+        $('.btn-loop').removeClass('disabled');
+      }
+      else {
+        $('.btn-trim-audio').addClass('disabled');
+        $('.btn-loop').addClass('disabled');
+      }
+
+      $audioStart.val(cueFormatters(format)(start));
+      $audioEnd.val(cueFormatters(format)(end));
+
+      startTime = start;
+      endTime = end;
+      video.currentTime = start;
+    }
+
+    function updateTime(time) {
+      $time.html(cueFormatters(format)(time));
+
+      audioPos = time;
+    }
+
+    updateSelect(startTime, endTime);
+    updateTime(audioPos);
+
+    $container.on("click", ".btn-annotations-download", function() {
+      ee.emit("annotationsrequest");
+    });
+
+    $container.on("click", ".btn-play", function() {
+      ee.emit("play");
+    });
+
+    $container.on("click", ".btn-pause", function() {
+      ee.emit("pause");
+    });
+
+    $container.on("click", ".btn-stop", function() {
+      ee.emit("stop");
+    });
+
+    $container.on("click", ".btn-rewind", function() {
+      ee.emit("rewind");
+    });
+
+    $container.on("click", ".btn-fast-forward", function() {
+      ee.emit("fastforward");
+    });
+
+    //zoom buttons
+    $container.on("click", ".btn-zoom-in", function() {
+      ee.emit("zoomin");
+    });
+
+    $container.on("click", ".btn-zoom-out", function() {
+      ee.emit("zoomout");
+    });
+
+    $container.on("change", ".time-format", function(e) {
+      format = $timeFormat.val();
+      ee.emit("durationformat", format);
+
+      updateSelect(startTime, endTime);
+      updateTime(audioPos);
+    });
+
+    $container.on("input change", ".master-gain", function(e){
+      ee.emit("mastervolumechange", e.target.value);
+    });
+
+    $container.on("change", ".continuous-play", function(e){
+      ee.emit("continuousplay", $(e.target).is(':checked'));
+    });
+
+    $container.on("change", ".link-endpoints", function(e){
+      ee.emit("linkendpoints", $(e.target).is(':checked'));
+    });
+
+    $container.on("change", ".automatic-scroll", function(e){
+      ee.emit("automaticscroll", $(e.target).is(':checked'));
+    });
+
+    function displayLoadingData(data) {
+      var info = $("<div/>").append(data);
+      $(".loading-data").append(info);
+    }
+
+    /*
+    * Code below receives updates from the playlist.
+    */
+
+    ee.on("select", updateSelect);
+
+    ee.on("timeupdate", updateTime);
+
+    ee.on("audiosourcesrendered", function() {
+      displayLoadingData("Tracks have been rendered");
+    });
+
+    ee.on('automaticscroll', (val) => {
+      playlist.isAutomaticScroll = val;
+    });
+
+    ee.on('durationformat', (format) => {
+      playlist.durationFormat = format;
+      playlist.drawRequest();
+    });
+
+    ee.on('select', (start, end, track) => {
+      if (playlist.isPlaying()) {
+        playlist.lastSeeked = start;
+        playlist.pausedAt = undefined;
+        playlist.restartPlayFrom(start);
+      } else {
+        // reset if it was paused.
+        playlist.seek(start, end, track);
+        playlist.ee.emit('timeupdate', start);
+        playlist.drawRequest();
+      }
+    });
+
+    ee.on('play', (start, end) => {
+      const startAt = start || playlist.pausedAt || playlist.cursor;
+      stopVideoAt = end;
+
+      const doneSeeking = () => {
+        video.play();
+        playlist.play(start, end);
+        video.removeEventListener('seeked', doneSeeking);
+      };
+
+      video.addEventListener('seeked', doneSeeking);
+      video.currentTime = startAt;
+    });
+
+    ee.on('pause', () => {
+      playlist.pause();
+      video.pause();
+    });
+
+    ee.on('stop', () => {
+      playlist.stop();
+      video.pause();
+    });
+
+    ee.on('rewind', () => {
+      playlist.rewind();
+    });
+
+    ee.on('fastforward', () => {
+      playlist.fastForward();
+    });
+
+    ee.on('mastervolumechange', (volume) => {
+      playlist.masterGain = volume / 100;
+      playlist.tracks.forEach((track) => {
+        track.setMasterGainLevel(playlist.masterGain);
+      });
+    });
+
+    ee.on('zoomin', () => {
+      const zoomIndex = Math.max(0, playlist.zoomIndex - 1);
+      const zoom = playlist.zoomLevels[zoomIndex];
+
+      if (zoom !== playlist.samplesPerPixel) {
+        playlist.setZoom(zoom);
+        playlist.drawRequest();
+      }
+    });
+
+    ee.on('zoomout', () => {
+      const zoomIndex = Math.min(playlist.zoomLevels.length - 1, playlist.zoomIndex + 1);
+      const zoom = playlist.zoomLevels[zoomIndex];
+
+      if (zoom !== playlist.samplesPerPixel) {
+        playlist.setZoom(zoom);
+        playlist.drawRequest();
+      }
+    });
+
+    ee.on('scroll', () => {
+      playlist.isScrolling = true;
+      playlist.drawRequest();
+      clearTimeout(playlist.scrollTimer);
+      playlist.scrollTimer = setTimeout(() => {
+        playlist.isScrolling = false;
+      }, 200);
+    });
 });
 
 
+
+// https://developer.mozilla.org/en-US/docs/Web/Guide/Events/Media_events
 
 
 // ytdl https://www.youtube.com/watch?v=q9ANdC7ZFAI --quality 248 --output video.webm
 // ytdl https://www.youtube.com/watch?v=q9ANdC7ZFAI --quality 251 --output audio.webm
 // ffmpeg -i audio.webm -vn -acodec copy ./dist/251.ogg
+
+/***/ }),
+/* 23 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var parser = (function() {
+    var pItems = {};
+
+    /**
+     * Converts SubRip subtitles into array of objects
+     * [{
+     *     id:        `Number of subtitle`
+     *     startTime: `Start time of subtitle`
+     *     endTime:   `End time of subtitle
+     *     text: `Text of subtitle`
+     * }]
+     *
+     * @param  {String}  data SubRip suntitles string
+     * @param  {Boolean} ms   Optional: use milliseconds for startTime and endTime
+     * @return {Array}  
+     */
+    pItems.fromSrt = function(data, ms) {
+        var useMs = ms ? true : false;
+
+        data = data.replace(/\r/g, '');
+        var regex = /(\d+)\n(\d{2}:\d{2}:\d{2},\d{3}) --> (\d{2}:\d{2}:\d{2},\d{3})/g;
+        data = data.split(regex);
+        data.shift();
+
+        var items = [];
+        for (var i = 0; i < data.length; i += 4) {
+            items.push({
+                id: data[i].trim(),
+                startTime: useMs ? timeMs(data[i + 1].trim()) : data[i + 1].trim(),
+                endTime: useMs ? timeMs(data[i + 2].trim()) : data[i + 2].trim(),
+                text: data[i + 3].trim()
+            });
+        }
+
+        return items;
+    };
+
+    /**
+     * Converts Array of objects created by this module to SubRip subtitles
+     * @param  {Array}  data
+     * @return {String}      SubRip subtitles string
+     */
+    pItems.toSrt = function(data) {
+        if (!data instanceof Array) return '';
+        var res = '';
+
+        for (var i = 0; i < data.length; i++) {
+            var s = data[i];
+
+            if (!isNaN(s.startTime) && !isNaN(s.endTime)) {
+                s.startTime = msTime(parseInt(s.startTime, 10));
+                s.endTime = msTime(parseInt(s.endTime, 10));
+            }
+
+            res += s.id + '\r\n';
+            res += s.startTime + ' --> ' + s.endTime + '\r\n';
+            res += s.text.replace('\n', '\r\n') + '\r\n\r\n';
+        }
+
+        return res;
+    };
+
+    var timeMs = function(val) {
+        var regex = /(\d+):(\d{2}):(\d{2}),(\d{3})/;
+        var parts = regex.exec(val);
+
+        if (parts === null) {
+            return 0;
+        }
+
+        for (var i = 1; i < 5; i++) {
+            parts[i] = parseInt(parts[i], 10);
+            if (isNaN(parts[i])) parts[i] = 0;
+        }
+
+        // hours + minutes + seconds + ms
+        return parts[1] * 3600000 + parts[2] * 60000 + parts[3] * 1000 + parts[4];
+    };
+
+    var msTime = function(val) {
+        var measures = [ 3600000, 60000, 1000 ]; 
+        var time = [];
+
+        for (var i in measures) {
+            var res = (val / measures[i] >> 0).toString();
+            
+            if (res.length < 2) res = '0' + res;
+            val %= measures[i];
+            time.push(res);
+        }
+
+        var ms = val.toString();
+        if (ms.length < 3) {
+            for (i = 0; i <= 3 - ms.length; i++) ms = '0' + ms;
+        }
+
+        return time.join(':') + ',' + ms;
+    };
+
+    return pItems;
+})();
+
+// ignore exports for browser
+if (true) {
+    module.exports = parser;
+}
+
 
 /***/ }),
 /* 24 */
@@ -2407,149 +1653,28 @@ ee.on('finished', function () {
 /* 27 */
 /***/ (function(module, exports, __webpack_require__) {
 
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.init = init;
-
-exports.default = function () {
-  var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
-  var ee = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : (0, _eventEmitter2.default)();
-
-  return init(options, ee);
-};
-
-var _lodash = __webpack_require__(12);
-
-var _lodash2 = _interopRequireDefault(_lodash);
-
-var _createElement = __webpack_require__(28);
-
-var _createElement2 = _interopRequireDefault(_createElement);
-
-var _eventEmitter = __webpack_require__(18);
-
-var _eventEmitter2 = _interopRequireDefault(_eventEmitter);
-
-var _Playlist = __webpack_require__(45);
-
-var _Playlist2 = _interopRequireDefault(_Playlist);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-function init() {
-  var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
-  var ee = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : (0, _eventEmitter2.default)();
-
-  if (options.container === undefined) {
-    throw new Error('DOM element container must be given.');
-  }
-
-  window.OfflineAudioContext = window.OfflineAudioContext || window.webkitOfflineAudioContext;
-  window.AudioContext = window.AudioContext || window.webkitAudioContext;
-
-  var audioContext = new window.AudioContext();
-
-  var defaults = {
-    ac: audioContext,
-    sampleRate: audioContext.sampleRate,
-    samplesPerPixel: 4096,
-    mono: true,
-    fadeType: 'logarithmic',
-    exclSolo: false,
-    timescale: false,
-    controls: {
-      show: false,
-      width: 150
-    },
-    colors: {
-      waveOutlineColor: 'white',
-      timeColor: 'grey',
-      fadeColor: 'black'
-    },
-    seekStyle: 'line',
-    waveHeight: 128,
-    state: 'cursor',
-    zoomLevels: [512, 1024, 2048, 4096],
-    annotationList: {
-      annotations: [],
-      controls: [],
-      editable: false,
-      linkEndpoints: false,
-      isContinuousPlay: false
-    },
-    isAutomaticScroll: false
-  };
-
-  var config = (0, _lodash2.default)(defaults, options);
-  var zoomIndex = config.zoomLevels.indexOf(config.samplesPerPixel);
-
-  if (zoomIndex === -1) {
-    throw new Error('initial samplesPerPixel must be included in array zoomLevels');
-  }
-
-  var playlist = new _Playlist2.default();
-  playlist.setSampleRate(config.sampleRate);
-  playlist.setSamplesPerPixel(config.samplesPerPixel);
-  playlist.setAudioContext(config.ac);
-  playlist.setEventEmitter(ee);
-  playlist.setUpEventEmitter();
-  playlist.setTimeSelection(0, 0);
-  playlist.setState(config.state);
-  playlist.setControlOptions(config.controls);
-  playlist.setWaveHeight(config.waveHeight);
-  playlist.setColors(config.colors);
-  playlist.setZoomLevels(config.zoomLevels);
-  playlist.setZoomIndex(zoomIndex);
-  playlist.setMono(config.mono);
-  playlist.setExclSolo(config.exclSolo);
-  playlist.setShowTimeScale(config.timescale);
-  playlist.setSeekStyle(config.seekStyle);
-  playlist.setAnnotations(config.annotationList);
-  playlist.isAutomaticScroll = config.isAutomaticScroll;
-  playlist.isContinuousPlay = config.isContinuousPlay;
-  playlist.linkedEndpoints = config.linkedEndpoints;
-
-  // take care of initial virtual dom rendering.
-  var tree = playlist.render();
-  var rootNode = (0, _createElement2.default)(tree);
-
-  config.container.appendChild(rootNode);
-  playlist.tree = tree;
-  playlist.rootNode = rootNode;
-
-  return playlist;
-}
-
-/***/ }),
-/* 28 */
-/***/ (function(module, exports, __webpack_require__) {
-
-var createElement = __webpack_require__(13)
+var createElement = __webpack_require__(12)
 
 module.exports = createElement
 
 
 /***/ }),
-/* 29 */
+/* 28 */
 /***/ (function(module, exports) {
 
 /* (ignored) */
 
 /***/ }),
-/* 30 */
+/* 29 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-var assign        = __webpack_require__(31)
-  , normalizeOpts = __webpack_require__(39)
-  , isCallable    = __webpack_require__(40)
-  , contains      = __webpack_require__(41)
+var assign        = __webpack_require__(30)
+  , normalizeOpts = __webpack_require__(38)
+  , isCallable    = __webpack_require__(39)
+  , contains      = __webpack_require__(40)
 
   , d;
 
@@ -2610,19 +1735,19 @@ d.gs = function (dscr, get, set/*, options*/) {
 
 
 /***/ }),
-/* 31 */
+/* 30 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-module.exports = __webpack_require__(32)()
+module.exports = __webpack_require__(31)()
 	? Object.assign
-	: __webpack_require__(33);
+	: __webpack_require__(32);
 
 
 /***/ }),
-/* 32 */
+/* 31 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2638,14 +1763,14 @@ module.exports = function () {
 
 
 /***/ }),
-/* 33 */
+/* 32 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-var keys  = __webpack_require__(34)
-  , value = __webpack_require__(38)
+var keys  = __webpack_require__(33)
+  , value = __webpack_require__(37)
   , max   = Math.max;
 
 module.exports = function (dest, src /*, …srcn*/) {
@@ -2668,19 +1793,19 @@ module.exports = function (dest, src /*, …srcn*/) {
 
 
 /***/ }),
-/* 34 */
+/* 33 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-module.exports = __webpack_require__(35)()
+module.exports = __webpack_require__(34)()
 	? Object.keys
-	: __webpack_require__(36);
+	: __webpack_require__(35);
 
 
 /***/ }),
-/* 35 */
+/* 34 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2697,7 +1822,7 @@ module.exports = function () {
 
 
 /***/ }),
-/* 36 */
+/* 35 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2713,7 +1838,7 @@ module.exports = function (object) {
 
 
 /***/ }),
-/* 37 */
+/* 36 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2724,7 +1849,7 @@ module.exports = function () {};
 
 
 /***/ }),
-/* 38 */
+/* 37 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2739,7 +1864,7 @@ module.exports = function (value) {
 
 
 /***/ }),
-/* 39 */
+/* 38 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2766,7 +1891,7 @@ module.exports = function (opts1 /*, …options*/) {
 
 
 /***/ }),
-/* 40 */
+/* 39 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2780,19 +1905,19 @@ module.exports = function (obj) {
 
 
 /***/ }),
-/* 41 */
+/* 40 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-module.exports = __webpack_require__(42)()
+module.exports = __webpack_require__(41)()
 	? String.prototype.contains
-	: __webpack_require__(43);
+	: __webpack_require__(42);
 
 
 /***/ }),
-/* 42 */
+/* 41 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2807,7 +1932,7 @@ module.exports = function () {
 
 
 /***/ }),
-/* 43 */
+/* 42 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2821,7 +1946,7 @@ module.exports = function (searchString/*, position*/) {
 
 
 /***/ }),
-/* 44 */
+/* 43 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2834,7 +1959,7 @@ module.exports = function (fn) {
 
 
 /***/ }),
-/* 45 */
+/* 44 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2846,7 +1971,7 @@ Object.defineProperty(exports, "__esModule", {
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var _lodash = __webpack_require__(46);
+var _lodash = __webpack_require__(45);
 
 var _lodash2 = _interopRequireDefault(_lodash);
 
@@ -2854,33 +1979,33 @@ var _h = __webpack_require__(8);
 
 var _h2 = _interopRequireDefault(_h);
 
-var _diff = __webpack_require__(57);
+var _diff = __webpack_require__(56);
 
 var _diff2 = _interopRequireDefault(_diff);
 
-var _patch = __webpack_require__(60);
+var _patch = __webpack_require__(59);
 
 var _patch2 = _interopRequireDefault(_patch);
 
-var _inlineWorker = __webpack_require__(65);
+var _inlineWorker = __webpack_require__(64);
 
 var _inlineWorker2 = _interopRequireDefault(_inlineWorker);
 
 var _conversions = __webpack_require__(0);
 
-var _LoaderFactory = __webpack_require__(66);
+var _LoaderFactory = __webpack_require__(65);
 
 var _LoaderFactory2 = _interopRequireDefault(_LoaderFactory);
 
-var _ScrollHook = __webpack_require__(69);
+var _ScrollHook = __webpack_require__(68);
 
 var _ScrollHook2 = _interopRequireDefault(_ScrollHook);
 
-var _TimeScale = __webpack_require__(70);
+var _TimeScale = __webpack_require__(69);
 
 var _TimeScale2 = _interopRequireDefault(_TimeScale);
 
-var _Track = __webpack_require__(72);
+var _Track = __webpack_require__(71);
 
 var _Track2 = _interopRequireDefault(_Track);
 
@@ -3896,7 +3021,7 @@ var _class = function () {
 exports.default = _class;
 
 /***/ }),
-/* 46 */
+/* 45 */
 /***/ (function(module, exports) {
 
 /**
@@ -4570,7 +3695,7 @@ module.exports = defaults;
 
 
 /***/ }),
-/* 47 */
+/* 46 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -4578,17 +3703,17 @@ module.exports = defaults;
 
 var isArray = __webpack_require__(10);
 
-var VNode = __webpack_require__(48);
-var VText = __webpack_require__(49);
+var VNode = __webpack_require__(47);
+var VText = __webpack_require__(48);
 var isVNode = __webpack_require__(2);
 var isVText = __webpack_require__(6);
 var isWidget = __webpack_require__(1);
 var isHook = __webpack_require__(5);
 var isVThunk = __webpack_require__(7);
 
-var parseTag = __webpack_require__(50);
-var softSetHook = __webpack_require__(52);
-var evHook = __webpack_require__(53);
+var parseTag = __webpack_require__(49);
+var softSetHook = __webpack_require__(51);
+var evHook = __webpack_require__(52);
 
 module.exports = h;
 
@@ -4714,7 +3839,7 @@ function errorString(obj) {
 
 
 /***/ }),
-/* 48 */
+/* 47 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var version = __webpack_require__(3)
@@ -4792,7 +3917,7 @@ VirtualNode.prototype.type = "VirtualNode"
 
 
 /***/ }),
-/* 49 */
+/* 48 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var version = __webpack_require__(3)
@@ -4808,13 +3933,13 @@ VirtualText.prototype.type = "VirtualText"
 
 
 /***/ }),
-/* 50 */
+/* 49 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-var split = __webpack_require__(51);
+var split = __webpack_require__(50);
 
 var classIdSplit = /([\.#]?[a-zA-Z0-9\u007F-\uFFFF_:-]+)/;
 var notClassId = /^\.|#/;
@@ -4869,7 +3994,7 @@ function parseTag(tag, props) {
 
 
 /***/ }),
-/* 51 */
+/* 50 */
 /***/ (function(module, exports) {
 
 /*!
@@ -4981,7 +4106,7 @@ module.exports = (function split(undef) {
 
 
 /***/ }),
-/* 52 */
+/* 51 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -5005,13 +4130,13 @@ SoftSetHook.prototype.hook = function (node, propertyName) {
 
 
 /***/ }),
-/* 53 */
+/* 52 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-var EvStore = __webpack_require__(54);
+var EvStore = __webpack_require__(53);
 
 module.exports = EvHook;
 
@@ -5039,13 +4164,13 @@ EvHook.prototype.unhook = function(node, propertyName) {
 
 
 /***/ }),
-/* 54 */
+/* 53 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-var OneVersionConstraint = __webpack_require__(55);
+var OneVersionConstraint = __webpack_require__(54);
 
 var MY_VERSION = '7';
 OneVersionConstraint('ev-store', MY_VERSION);
@@ -5066,13 +4191,13 @@ function EvStore(elem) {
 
 
 /***/ }),
-/* 55 */
+/* 54 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-var Individual = __webpack_require__(56);
+var Individual = __webpack_require__(55);
 
 module.exports = OneVersion;
 
@@ -5095,7 +4220,7 @@ function OneVersion(moduleName, version, defaultValue) {
 
 
 /***/ }),
-/* 56 */
+/* 55 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -5122,28 +4247,28 @@ function Individual(key, value) {
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(4)))
 
 /***/ }),
-/* 57 */
+/* 56 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var diff = __webpack_require__(58)
+var diff = __webpack_require__(57)
 
 module.exports = diff
 
 
 /***/ }),
-/* 58 */
+/* 57 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var isArray = __webpack_require__(10)
 
-var VPatch = __webpack_require__(19)
+var VPatch = __webpack_require__(18)
 var isVNode = __webpack_require__(2)
 var isVText = __webpack_require__(6)
 var isWidget = __webpack_require__(1)
 var isThunk = __webpack_require__(7)
-var handleThunk = __webpack_require__(17)
+var handleThunk = __webpack_require__(16)
 
-var diffProps = __webpack_require__(59)
+var diffProps = __webpack_require__(58)
 
 module.exports = diff
 
@@ -5564,10 +4689,10 @@ function appendPatch(apply, patch) {
 
 
 /***/ }),
-/* 59 */
+/* 58 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var isObject = __webpack_require__(16)
+var isObject = __webpack_require__(15)
 var isHook = __webpack_require__(5)
 
 module.exports = diffProps
@@ -5628,24 +4753,24 @@ function getPrototype(value) {
 
 
 /***/ }),
-/* 60 */
+/* 59 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var patch = __webpack_require__(61)
+var patch = __webpack_require__(60)
 
 module.exports = patch
 
 
 /***/ }),
-/* 61 */
+/* 60 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var document = __webpack_require__(14)
+var document = __webpack_require__(13)
 var isArray = __webpack_require__(10)
 
-var render = __webpack_require__(13)
-var domIndex = __webpack_require__(62)
-var patchOp = __webpack_require__(63)
+var render = __webpack_require__(12)
+var domIndex = __webpack_require__(61)
+var patchOp = __webpack_require__(62)
 module.exports = patch
 
 function patch(rootNode, patches, renderOptions) {
@@ -5723,7 +4848,7 @@ function patchIndices(patches) {
 
 
 /***/ }),
-/* 62 */
+/* 61 */
 /***/ (function(module, exports) {
 
 // Maps a virtual DOM tree onto a real DOM tree in an efficient manner.
@@ -5814,15 +4939,15 @@ function ascending(a, b) {
 
 
 /***/ }),
-/* 63 */
+/* 62 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var applyProperties = __webpack_require__(15)
+var applyProperties = __webpack_require__(14)
 
 var isWidget = __webpack_require__(1)
-var VPatch = __webpack_require__(19)
+var VPatch = __webpack_require__(18)
 
-var updateWidget = __webpack_require__(64)
+var updateWidget = __webpack_require__(63)
 
 module.exports = applyPatch
 
@@ -5971,7 +5096,7 @@ function replaceRoot(oldRoot, newRoot) {
 
 
 /***/ }),
-/* 64 */
+/* 63 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var isWidget = __webpack_require__(1)
@@ -5992,7 +5117,7 @@ function updateWidget(a, b) {
 
 
 /***/ }),
-/* 65 */
+/* 64 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /* WEBPACK VAR INJECTION */(function(global) {var WORKER_ENABLED = !!(global === global.window && global.URL && global.Blob && global.Worker);
@@ -6038,7 +5163,7 @@ module.exports = InlineWorker;
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(4)))
 
 /***/ }),
-/* 66 */
+/* 65 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -6050,11 +5175,11 @@ Object.defineProperty(exports, "__esModule", {
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var _BlobLoader = __webpack_require__(67);
+var _BlobLoader = __webpack_require__(66);
 
 var _BlobLoader2 = _interopRequireDefault(_BlobLoader);
 
-var _XHRLoader = __webpack_require__(68);
+var _XHRLoader = __webpack_require__(67);
 
 var _XHRLoader2 = _interopRequireDefault(_XHRLoader);
 
@@ -6086,7 +5211,7 @@ var _class = function () {
 exports.default = _class;
 
 /***/ }),
-/* 67 */
+/* 66 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -6100,7 +5225,7 @@ var _createClass = function () { function defineProperties(target, props) { for 
 
 var _get = function get(object, property, receiver) { if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { return get(parent, property, receiver); } } else if ("value" in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } };
 
-var _Loader2 = __webpack_require__(20);
+var _Loader2 = __webpack_require__(19);
 
 var _Loader3 = _interopRequireDefault(_Loader2);
 
@@ -6167,7 +5292,7 @@ var _class = function (_Loader) {
 exports.default = _class;
 
 /***/ }),
-/* 68 */
+/* 67 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -6181,7 +5306,7 @@ var _createClass = function () { function defineProperties(target, props) { for 
 
 var _get = function get(object, property, receiver) { if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { return get(parent, property, receiver); } } else if ("value" in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } };
 
-var _Loader2 = __webpack_require__(20);
+var _Loader2 = __webpack_require__(19);
 
 var _Loader3 = _interopRequireDefault(_Loader2);
 
@@ -6244,7 +5369,7 @@ var _class = function (_Loader) {
 exports.default = _class;
 
 /***/ }),
-/* 69 */
+/* 68 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -6299,7 +5424,7 @@ var _class = function () {
 exports.default = _class;
 
 /***/ }),
-/* 70 */
+/* 69 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -6317,7 +5442,7 @@ var _h2 = _interopRequireDefault(_h);
 
 var _conversions = __webpack_require__(0);
 
-var _TimeScaleHook = __webpack_require__(71);
+var _TimeScaleHook = __webpack_require__(70);
 
 var _TimeScaleHook2 = _interopRequireDefault(_TimeScaleHook);
 
@@ -6478,7 +5603,7 @@ var TimeScale = function () {
 exports.default = TimeScale;
 
 /***/ }),
-/* 71 */
+/* 70 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -6535,7 +5660,7 @@ var _class = function () {
 exports.default = _class;
 
 /***/ }),
-/* 72 */
+/* 71 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -6547,7 +5672,7 @@ Object.defineProperty(exports, "__esModule", {
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var _lodash = __webpack_require__(12);
+var _lodash = __webpack_require__(72);
 
 var _lodash2 = _interopRequireDefault(_lodash);
 
@@ -6555,7 +5680,7 @@ var _lodash3 = __webpack_require__(73);
 
 var _lodash4 = _interopRequireDefault(_lodash3);
 
-var _uuid = __webpack_require__(21);
+var _uuid = __webpack_require__(20);
 
 var _uuid2 = _interopRequireDefault(_uuid);
 
@@ -7181,6 +6306,649 @@ var _class = function () {
 }();
 
 exports.default = _class;
+
+/***/ }),
+/* 72 */
+/***/ (function(module, exports) {
+
+/**
+ * lodash (Custom Build) <https://lodash.com/>
+ * Build: `lodash modularize exports="npm" -o ./`
+ * Copyright jQuery Foundation and other contributors <https://jquery.org/>
+ * Released under MIT license <https://lodash.com/license>
+ * Based on Underscore.js 1.8.3 <http://underscorejs.org/LICENSE>
+ * Copyright Jeremy Ashkenas, DocumentCloud and Investigative Reporters & Editors
+ */
+
+/** Used as references for various `Number` constants. */
+var MAX_SAFE_INTEGER = 9007199254740991;
+
+/** `Object#toString` result references. */
+var argsTag = '[object Arguments]',
+    funcTag = '[object Function]',
+    genTag = '[object GeneratorFunction]';
+
+/** Used to detect unsigned integer values. */
+var reIsUint = /^(?:0|[1-9]\d*)$/;
+
+/**
+ * A faster alternative to `Function#apply`, this function invokes `func`
+ * with the `this` binding of `thisArg` and the arguments of `args`.
+ *
+ * @private
+ * @param {Function} func The function to invoke.
+ * @param {*} thisArg The `this` binding of `func`.
+ * @param {Array} args The arguments to invoke `func` with.
+ * @returns {*} Returns the result of `func`.
+ */
+function apply(func, thisArg, args) {
+  switch (args.length) {
+    case 0: return func.call(thisArg);
+    case 1: return func.call(thisArg, args[0]);
+    case 2: return func.call(thisArg, args[0], args[1]);
+    case 3: return func.call(thisArg, args[0], args[1], args[2]);
+  }
+  return func.apply(thisArg, args);
+}
+
+/**
+ * The base implementation of `_.times` without support for iteratee shorthands
+ * or max array length checks.
+ *
+ * @private
+ * @param {number} n The number of times to invoke `iteratee`.
+ * @param {Function} iteratee The function invoked per iteration.
+ * @returns {Array} Returns the array of results.
+ */
+function baseTimes(n, iteratee) {
+  var index = -1,
+      result = Array(n);
+
+  while (++index < n) {
+    result[index] = iteratee(index);
+  }
+  return result;
+}
+
+/**
+ * Creates a unary function that invokes `func` with its argument transformed.
+ *
+ * @private
+ * @param {Function} func The function to wrap.
+ * @param {Function} transform The argument transform.
+ * @returns {Function} Returns the new function.
+ */
+function overArg(func, transform) {
+  return function(arg) {
+    return func(transform(arg));
+  };
+}
+
+/** Used for built-in method references. */
+var objectProto = Object.prototype;
+
+/** Used to check objects for own properties. */
+var hasOwnProperty = objectProto.hasOwnProperty;
+
+/**
+ * Used to resolve the
+ * [`toStringTag`](http://ecma-international.org/ecma-262/7.0/#sec-object.prototype.tostring)
+ * of values.
+ */
+var objectToString = objectProto.toString;
+
+/** Built-in value references. */
+var propertyIsEnumerable = objectProto.propertyIsEnumerable;
+
+/* Built-in method references for those with the same name as other `lodash` methods. */
+var nativeKeys = overArg(Object.keys, Object),
+    nativeMax = Math.max;
+
+/** Detect if properties shadowing those on `Object.prototype` are non-enumerable. */
+var nonEnumShadows = !propertyIsEnumerable.call({ 'valueOf': 1 }, 'valueOf');
+
+/**
+ * Creates an array of the enumerable property names of the array-like `value`.
+ *
+ * @private
+ * @param {*} value The value to query.
+ * @param {boolean} inherited Specify returning inherited property names.
+ * @returns {Array} Returns the array of property names.
+ */
+function arrayLikeKeys(value, inherited) {
+  // Safari 8.1 makes `arguments.callee` enumerable in strict mode.
+  // Safari 9 makes `arguments.length` enumerable in strict mode.
+  var result = (isArray(value) || isArguments(value))
+    ? baseTimes(value.length, String)
+    : [];
+
+  var length = result.length,
+      skipIndexes = !!length;
+
+  for (var key in value) {
+    if ((inherited || hasOwnProperty.call(value, key)) &&
+        !(skipIndexes && (key == 'length' || isIndex(key, length)))) {
+      result.push(key);
+    }
+  }
+  return result;
+}
+
+/**
+ * Assigns `value` to `key` of `object` if the existing value is not equivalent
+ * using [`SameValueZero`](http://ecma-international.org/ecma-262/7.0/#sec-samevaluezero)
+ * for equality comparisons.
+ *
+ * @private
+ * @param {Object} object The object to modify.
+ * @param {string} key The key of the property to assign.
+ * @param {*} value The value to assign.
+ */
+function assignValue(object, key, value) {
+  var objValue = object[key];
+  if (!(hasOwnProperty.call(object, key) && eq(objValue, value)) ||
+      (value === undefined && !(key in object))) {
+    object[key] = value;
+  }
+}
+
+/**
+ * The base implementation of `_.keys` which doesn't treat sparse arrays as dense.
+ *
+ * @private
+ * @param {Object} object The object to query.
+ * @returns {Array} Returns the array of property names.
+ */
+function baseKeys(object) {
+  if (!isPrototype(object)) {
+    return nativeKeys(object);
+  }
+  var result = [];
+  for (var key in Object(object)) {
+    if (hasOwnProperty.call(object, key) && key != 'constructor') {
+      result.push(key);
+    }
+  }
+  return result;
+}
+
+/**
+ * The base implementation of `_.rest` which doesn't validate or coerce arguments.
+ *
+ * @private
+ * @param {Function} func The function to apply a rest parameter to.
+ * @param {number} [start=func.length-1] The start position of the rest parameter.
+ * @returns {Function} Returns the new function.
+ */
+function baseRest(func, start) {
+  start = nativeMax(start === undefined ? (func.length - 1) : start, 0);
+  return function() {
+    var args = arguments,
+        index = -1,
+        length = nativeMax(args.length - start, 0),
+        array = Array(length);
+
+    while (++index < length) {
+      array[index] = args[start + index];
+    }
+    index = -1;
+    var otherArgs = Array(start + 1);
+    while (++index < start) {
+      otherArgs[index] = args[index];
+    }
+    otherArgs[start] = array;
+    return apply(func, this, otherArgs);
+  };
+}
+
+/**
+ * Copies properties of `source` to `object`.
+ *
+ * @private
+ * @param {Object} source The object to copy properties from.
+ * @param {Array} props The property identifiers to copy.
+ * @param {Object} [object={}] The object to copy properties to.
+ * @param {Function} [customizer] The function to customize copied values.
+ * @returns {Object} Returns `object`.
+ */
+function copyObject(source, props, object, customizer) {
+  object || (object = {});
+
+  var index = -1,
+      length = props.length;
+
+  while (++index < length) {
+    var key = props[index];
+
+    var newValue = customizer
+      ? customizer(object[key], source[key], key, object, source)
+      : undefined;
+
+    assignValue(object, key, newValue === undefined ? source[key] : newValue);
+  }
+  return object;
+}
+
+/**
+ * Creates a function like `_.assign`.
+ *
+ * @private
+ * @param {Function} assigner The function to assign values.
+ * @returns {Function} Returns the new assigner function.
+ */
+function createAssigner(assigner) {
+  return baseRest(function(object, sources) {
+    var index = -1,
+        length = sources.length,
+        customizer = length > 1 ? sources[length - 1] : undefined,
+        guard = length > 2 ? sources[2] : undefined;
+
+    customizer = (assigner.length > 3 && typeof customizer == 'function')
+      ? (length--, customizer)
+      : undefined;
+
+    if (guard && isIterateeCall(sources[0], sources[1], guard)) {
+      customizer = length < 3 ? undefined : customizer;
+      length = 1;
+    }
+    object = Object(object);
+    while (++index < length) {
+      var source = sources[index];
+      if (source) {
+        assigner(object, source, index, customizer);
+      }
+    }
+    return object;
+  });
+}
+
+/**
+ * Checks if `value` is a valid array-like index.
+ *
+ * @private
+ * @param {*} value The value to check.
+ * @param {number} [length=MAX_SAFE_INTEGER] The upper bounds of a valid index.
+ * @returns {boolean} Returns `true` if `value` is a valid index, else `false`.
+ */
+function isIndex(value, length) {
+  length = length == null ? MAX_SAFE_INTEGER : length;
+  return !!length &&
+    (typeof value == 'number' || reIsUint.test(value)) &&
+    (value > -1 && value % 1 == 0 && value < length);
+}
+
+/**
+ * Checks if the given arguments are from an iteratee call.
+ *
+ * @private
+ * @param {*} value The potential iteratee value argument.
+ * @param {*} index The potential iteratee index or key argument.
+ * @param {*} object The potential iteratee object argument.
+ * @returns {boolean} Returns `true` if the arguments are from an iteratee call,
+ *  else `false`.
+ */
+function isIterateeCall(value, index, object) {
+  if (!isObject(object)) {
+    return false;
+  }
+  var type = typeof index;
+  if (type == 'number'
+        ? (isArrayLike(object) && isIndex(index, object.length))
+        : (type == 'string' && index in object)
+      ) {
+    return eq(object[index], value);
+  }
+  return false;
+}
+
+/**
+ * Checks if `value` is likely a prototype object.
+ *
+ * @private
+ * @param {*} value The value to check.
+ * @returns {boolean} Returns `true` if `value` is a prototype, else `false`.
+ */
+function isPrototype(value) {
+  var Ctor = value && value.constructor,
+      proto = (typeof Ctor == 'function' && Ctor.prototype) || objectProto;
+
+  return value === proto;
+}
+
+/**
+ * Performs a
+ * [`SameValueZero`](http://ecma-international.org/ecma-262/7.0/#sec-samevaluezero)
+ * comparison between two values to determine if they are equivalent.
+ *
+ * @static
+ * @memberOf _
+ * @since 4.0.0
+ * @category Lang
+ * @param {*} value The value to compare.
+ * @param {*} other The other value to compare.
+ * @returns {boolean} Returns `true` if the values are equivalent, else `false`.
+ * @example
+ *
+ * var object = { 'a': 1 };
+ * var other = { 'a': 1 };
+ *
+ * _.eq(object, object);
+ * // => true
+ *
+ * _.eq(object, other);
+ * // => false
+ *
+ * _.eq('a', 'a');
+ * // => true
+ *
+ * _.eq('a', Object('a'));
+ * // => false
+ *
+ * _.eq(NaN, NaN);
+ * // => true
+ */
+function eq(value, other) {
+  return value === other || (value !== value && other !== other);
+}
+
+/**
+ * Checks if `value` is likely an `arguments` object.
+ *
+ * @static
+ * @memberOf _
+ * @since 0.1.0
+ * @category Lang
+ * @param {*} value The value to check.
+ * @returns {boolean} Returns `true` if `value` is an `arguments` object,
+ *  else `false`.
+ * @example
+ *
+ * _.isArguments(function() { return arguments; }());
+ * // => true
+ *
+ * _.isArguments([1, 2, 3]);
+ * // => false
+ */
+function isArguments(value) {
+  // Safari 8.1 makes `arguments.callee` enumerable in strict mode.
+  return isArrayLikeObject(value) && hasOwnProperty.call(value, 'callee') &&
+    (!propertyIsEnumerable.call(value, 'callee') || objectToString.call(value) == argsTag);
+}
+
+/**
+ * Checks if `value` is classified as an `Array` object.
+ *
+ * @static
+ * @memberOf _
+ * @since 0.1.0
+ * @category Lang
+ * @param {*} value The value to check.
+ * @returns {boolean} Returns `true` if `value` is an array, else `false`.
+ * @example
+ *
+ * _.isArray([1, 2, 3]);
+ * // => true
+ *
+ * _.isArray(document.body.children);
+ * // => false
+ *
+ * _.isArray('abc');
+ * // => false
+ *
+ * _.isArray(_.noop);
+ * // => false
+ */
+var isArray = Array.isArray;
+
+/**
+ * Checks if `value` is array-like. A value is considered array-like if it's
+ * not a function and has a `value.length` that's an integer greater than or
+ * equal to `0` and less than or equal to `Number.MAX_SAFE_INTEGER`.
+ *
+ * @static
+ * @memberOf _
+ * @since 4.0.0
+ * @category Lang
+ * @param {*} value The value to check.
+ * @returns {boolean} Returns `true` if `value` is array-like, else `false`.
+ * @example
+ *
+ * _.isArrayLike([1, 2, 3]);
+ * // => true
+ *
+ * _.isArrayLike(document.body.children);
+ * // => true
+ *
+ * _.isArrayLike('abc');
+ * // => true
+ *
+ * _.isArrayLike(_.noop);
+ * // => false
+ */
+function isArrayLike(value) {
+  return value != null && isLength(value.length) && !isFunction(value);
+}
+
+/**
+ * This method is like `_.isArrayLike` except that it also checks if `value`
+ * is an object.
+ *
+ * @static
+ * @memberOf _
+ * @since 4.0.0
+ * @category Lang
+ * @param {*} value The value to check.
+ * @returns {boolean} Returns `true` if `value` is an array-like object,
+ *  else `false`.
+ * @example
+ *
+ * _.isArrayLikeObject([1, 2, 3]);
+ * // => true
+ *
+ * _.isArrayLikeObject(document.body.children);
+ * // => true
+ *
+ * _.isArrayLikeObject('abc');
+ * // => false
+ *
+ * _.isArrayLikeObject(_.noop);
+ * // => false
+ */
+function isArrayLikeObject(value) {
+  return isObjectLike(value) && isArrayLike(value);
+}
+
+/**
+ * Checks if `value` is classified as a `Function` object.
+ *
+ * @static
+ * @memberOf _
+ * @since 0.1.0
+ * @category Lang
+ * @param {*} value The value to check.
+ * @returns {boolean} Returns `true` if `value` is a function, else `false`.
+ * @example
+ *
+ * _.isFunction(_);
+ * // => true
+ *
+ * _.isFunction(/abc/);
+ * // => false
+ */
+function isFunction(value) {
+  // The use of `Object#toString` avoids issues with the `typeof` operator
+  // in Safari 8-9 which returns 'object' for typed array and other constructors.
+  var tag = isObject(value) ? objectToString.call(value) : '';
+  return tag == funcTag || tag == genTag;
+}
+
+/**
+ * Checks if `value` is a valid array-like length.
+ *
+ * **Note:** This method is loosely based on
+ * [`ToLength`](http://ecma-international.org/ecma-262/7.0/#sec-tolength).
+ *
+ * @static
+ * @memberOf _
+ * @since 4.0.0
+ * @category Lang
+ * @param {*} value The value to check.
+ * @returns {boolean} Returns `true` if `value` is a valid length, else `false`.
+ * @example
+ *
+ * _.isLength(3);
+ * // => true
+ *
+ * _.isLength(Number.MIN_VALUE);
+ * // => false
+ *
+ * _.isLength(Infinity);
+ * // => false
+ *
+ * _.isLength('3');
+ * // => false
+ */
+function isLength(value) {
+  return typeof value == 'number' &&
+    value > -1 && value % 1 == 0 && value <= MAX_SAFE_INTEGER;
+}
+
+/**
+ * Checks if `value` is the
+ * [language type](http://www.ecma-international.org/ecma-262/7.0/#sec-ecmascript-language-types)
+ * of `Object`. (e.g. arrays, functions, objects, regexes, `new Number(0)`, and `new String('')`)
+ *
+ * @static
+ * @memberOf _
+ * @since 0.1.0
+ * @category Lang
+ * @param {*} value The value to check.
+ * @returns {boolean} Returns `true` if `value` is an object, else `false`.
+ * @example
+ *
+ * _.isObject({});
+ * // => true
+ *
+ * _.isObject([1, 2, 3]);
+ * // => true
+ *
+ * _.isObject(_.noop);
+ * // => true
+ *
+ * _.isObject(null);
+ * // => false
+ */
+function isObject(value) {
+  var type = typeof value;
+  return !!value && (type == 'object' || type == 'function');
+}
+
+/**
+ * Checks if `value` is object-like. A value is object-like if it's not `null`
+ * and has a `typeof` result of "object".
+ *
+ * @static
+ * @memberOf _
+ * @since 4.0.0
+ * @category Lang
+ * @param {*} value The value to check.
+ * @returns {boolean} Returns `true` if `value` is object-like, else `false`.
+ * @example
+ *
+ * _.isObjectLike({});
+ * // => true
+ *
+ * _.isObjectLike([1, 2, 3]);
+ * // => true
+ *
+ * _.isObjectLike(_.noop);
+ * // => false
+ *
+ * _.isObjectLike(null);
+ * // => false
+ */
+function isObjectLike(value) {
+  return !!value && typeof value == 'object';
+}
+
+/**
+ * Assigns own enumerable string keyed properties of source objects to the
+ * destination object. Source objects are applied from left to right.
+ * Subsequent sources overwrite property assignments of previous sources.
+ *
+ * **Note:** This method mutates `object` and is loosely based on
+ * [`Object.assign`](https://mdn.io/Object/assign).
+ *
+ * @static
+ * @memberOf _
+ * @since 0.10.0
+ * @category Object
+ * @param {Object} object The destination object.
+ * @param {...Object} [sources] The source objects.
+ * @returns {Object} Returns `object`.
+ * @see _.assignIn
+ * @example
+ *
+ * function Foo() {
+ *   this.a = 1;
+ * }
+ *
+ * function Bar() {
+ *   this.c = 3;
+ * }
+ *
+ * Foo.prototype.b = 2;
+ * Bar.prototype.d = 4;
+ *
+ * _.assign({ 'a': 0 }, new Foo, new Bar);
+ * // => { 'a': 1, 'c': 3 }
+ */
+var assign = createAssigner(function(object, source) {
+  if (nonEnumShadows || isPrototype(source) || isArrayLike(source)) {
+    copyObject(source, keys(source), object);
+    return;
+  }
+  for (var key in source) {
+    if (hasOwnProperty.call(source, key)) {
+      assignValue(object, key, source[key]);
+    }
+  }
+});
+
+/**
+ * Creates an array of the own enumerable property names of `object`.
+ *
+ * **Note:** Non-object values are coerced to objects. See the
+ * [ES spec](http://ecma-international.org/ecma-262/7.0/#sec-object.keys)
+ * for more details.
+ *
+ * @static
+ * @since 0.1.0
+ * @memberOf _
+ * @category Object
+ * @param {Object} object The object to query.
+ * @returns {Array} Returns the array of property names.
+ * @example
+ *
+ * function Foo() {
+ *   this.a = 1;
+ *   this.b = 2;
+ * }
+ *
+ * Foo.prototype.c = 3;
+ *
+ * _.keys(new Foo);
+ * // => ['a', 'b'] (iteration order is not guaranteed)
+ *
+ * _.keys('hi');
+ * // => ['0', '1']
+ */
+function keys(object) {
+  return isArrayLike(object) ? arrayLikeKeys(object) : baseKeys(object);
+}
+
+module.exports = assign;
+
 
 /***/ }),
 /* 73 */
@@ -8379,7 +8147,7 @@ var _createClass = function () { function defineProperties(target, props) { for 
 
 var _fadeMaker = __webpack_require__(11);
 
-var _fadeCurves = __webpack_require__(22);
+var _fadeCurves = __webpack_require__(21);
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
@@ -9005,7 +8773,7 @@ exports.default = function (aeneas) {
   return annotation;
 };
 
-var _uuid = __webpack_require__(21);
+var _uuid = __webpack_require__(20);
 
 var _uuid2 = _interopRequireDefault(_uuid);
 
