@@ -1,3 +1,50 @@
+$black: #000;
+$red: #e62b1e;
+
+body {
+  color: #7f7fb5
+}
+
+.playlist {
+  .playlist-tracks {
+    background: $black;
+  }
+
+  .channel {
+    background: grey;
+  }
+
+  .channel-progress {
+    background: $red;
+  }
+
+  .annotations {
+    .annotations-text {
+      .annotation {
+        span {
+          margin: 0.3rem 3rem;
+        }
+      }
+
+      .current {
+        background: $black;
+        .annotation-lines {
+          color: $red;
+        }
+      }
+    }
+
+    .annotation-lines {
+      color: white;
+    }
+  }
+}
+
+.ted-media {
+  text-align: center;
+  background: $black;
+}
+
 footer {
   margin-top: 2em;
 }

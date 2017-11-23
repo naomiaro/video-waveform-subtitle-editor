@@ -98,7 +98,7 @@ fetch('/Mogensen.srt')
     });
     playlist.setWaveHeight(96);
     playlist.setColors({
-      waveOutlineColor: '#E0EFF1',
+      waveOutlineColor: '#000',
       timeColor: 'grey',
       fadeColor: 'black'
     });
