@@ -5,6 +5,7 @@ $annotation-ctrl-height: 50px;
 $audio-ctrl-color: $purple;
 $audio-ctrl-color-stop: $red;
 $audio-ctrl-color-pause: orange;
+$audio-ctrl-color-play: green;
 
 body {
   color: $purple;
@@ -15,13 +16,13 @@ body {
   position: absolute;
   width: 100%;
   height: 100%;
-  margin-bottom: $annotation-ctrl-height;
 }
 
 .audio-ctrl-container {
   display: flex;
   justify-content: center;
   align-items: center;
+  margin: 2rem 0;
 }
 
 .audio-ctrl {
@@ -33,6 +34,7 @@ body {
   color: $audio-ctrl-color;
   cursor: pointer;
   line-height: 50px;
+  margin: 0 0.4rem;
 
   &.audio-ctrl-big {
     width: 75px;
@@ -49,6 +51,22 @@ body {
     color: $audio-ctrl-color-pause;
     border-color: $audio-ctrl-color-pause;
   }
+
+  &.btn-fast-forward,
+  &.btn-rewind,
+  &.btn-play {
+    color: $audio-ctrl-color-play;
+    border-color: $audio-ctrl-color-play;
+  }
+
+  &.btn-zoom-in {
+    margin-left: 4rem;
+  }
+}
+
+.audio-pos {
+  font-size: 20px;
+  font-weight: 200;
 }
 
 .ted-media {
