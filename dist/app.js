@@ -989,7 +989,7 @@ const cueList = [];
 
 var actions = [
   {
-    class: 'fa.fa-minus',
+    class: 'fa.fa-minus.anno-end-minus',
     title: 'Reduce annotation end by 0.010s',
     action: (annotation, i, annotations, opts) => {
       var next;
@@ -1005,7 +1005,7 @@ var actions = [
     }
   },
   {
-    class: 'fa.fa-plus',
+    class: 'fa.fa-plus.anno-end-plus',
     title: 'Increase annotation end by 0.010s',
     action: (annotation, i, annotations, opts) => {
       var next;
