@@ -29,6 +29,7 @@ body {
   display: flex;
   justify-content: space-evenly;
   align-items: center;
+  margin-top: 2rem;
 }
 
 .audio-ctrl {
@@ -98,6 +99,10 @@ body {
   }
 
   .selection.point {
+    background: grey;
+  }
+
+  .cursor {
     background: $red;
   }
 
@@ -215,6 +220,32 @@ body {
   border-radius: 0;
   height: 30px;
   font-size: 16px;
+  cursor: pointer;
+}
+
+.btn-annotations-download {
+  background: white;
+  color: $red;
+  cursor: pointer;
+  height: 50px;
+  line-height: 30px;
+  padding: 10px;
+  border-radius: 5%;
+}
+
+.annotation-play-option {
+  color: $red;
+
+  label {
+    cursor: pointer;
+    font-weight: 200;
+    font-size: 16px;
+  }
+
+  input {
+    cursor: pointer;
+    margin-right: 5px;
+  }
 }
 
 footer {
