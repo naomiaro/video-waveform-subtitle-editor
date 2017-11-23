@@ -11,41 +11,39 @@
         <source src="video.webm" type="video/webm">
       </video>
       <div id="playlist"></div>
-    </div>
-    <div class="ted-controls">
-      <div id="top-bar" class="playlist-top-bar">
-        <div class="playlist-toolbar">
-          <div class="btn-group">
-            <span class="btn-pause btn btn-warning"><i class="fa fa-pause"></i></span>
-            <span class="btn-play btn btn-success"><i class="fa fa-play"></i></span>
-            <span class="btn-stop btn btn-danger"><i class="fa fa-stop"></i></span>
-            <span class="btn-rewind btn btn-success"><i class="fa fa-fast-backward"></i></span>
-            <span class="btn-fast-forward btn btn-success"><i class="fa fa-fast-forward"></i></span>
-          </div>
-          <div class="btn-group">
-            <span title="zoom in" class="btn-zoom-in btn btn-default"><i class="fa fa-search-plus"></i></span>
-            <span title="zoom out" class="btn-zoom-out btn btn-default"><i class="fa fa-search-minus"></i></span>
-            <span title="Download the annotations as json" class="btn-annotations-download btn btn-default">Download JSON</span>
-          </div>
+      <div class="playlist-toolbar">
+        <div class="btn-group">
+          <span class="btn-pause btn btn-warning"><i class="fa fa-pause"></i></span>
+          <span class="btn-play btn btn-success"><i class="fa fa-play"></i></span>
+          <span class="btn-stop btn btn-danger"><i class="fa fa-stop"></i></span>
+          <span class="btn-rewind btn btn-success"><i class="fa fa-fast-backward"></i></span>
+          <span class="btn-fast-forward btn btn-success"><i class="fa fa-fast-forward"></i></span>
         </div>
-      </div>
-      <form class="form-inline">
-        <select class="time-format form-control">
-          <option value="seconds">seconds</option>
-          <option value="thousandths">thousandths</option>
-          <option value="hh:mm:ss">hh:mm:ss</option>
-          <option value="hh:mm:ss.u">hh:mm:ss + tenths</option>
-          <option value="hh:mm:ss.uu">hh:mm:ss + hundredths</option>
-          <option value="hh:mm:ss.uuu" selected="selected">hh:mm:ss + milliseconds</option>
-        </select>
+        <div class="btn-group">
+          <span title="zoom in" class="btn-zoom-in btn btn-default"><i class="fa fa-search-plus"></i></span>
+          <span title="zoom out" class="btn-zoom-out btn btn-default"><i class="fa fa-search-minus"></i></span>
+        </div>
         <label class="audio-pos">00:00:00.0</label>
-        <div class="checkbox">
-          <label>
-            <input type="checkbox" class="continuous-play"> Continuous Annotation Play
-          </label>
-        </div>
-      </form>
-    </div> 
+      </div>
+      <div class="ted-annotations-controls">
+        <form class="form-inline">
+          <select class="time-format form-control">
+            <option value="seconds">seconds</option>
+            <option value="thousandths">thousandths</option>
+            <option value="hh:mm:ss">hh:mm:ss</option>
+            <option value="hh:mm:ss.u" selected="selected">hh:mm:ss + tenths</option>
+            <option value="hh:mm:ss.uu">hh:mm:ss + hundredths</option>
+            <option value="hh:mm:ss.uuu">hh:mm:ss + milliseconds</option>
+          </select>
+          <div class="checkbox">
+            <label>
+              <input type="checkbox" class="continuous-play">Continuous Annotation Play
+            </label>
+          </div>
+          <div title="Download the annotations as json" class="btn-annotations-download btn btn-default">Download JSON</div>
+        </form>
+      </div>
+    </div>
   </div>
   <script src="//code.jquery.com/jquery-2.1.4.min.js"></script>
   <script type="text/javascript" src="app.js"></script>

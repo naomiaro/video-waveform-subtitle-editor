@@ -1,18 +1,22 @@
 $black: #000;
 $red: #e62b1e;
+$annotation-ctrl-height: 50px;
 
 body {
   color: #7f7fb5;
   background: $black;
 }
 
+.stage {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  margin-bottom: $annotation-ctrl-height;
+}
+
 .ted-media {
   float: left;
   width: 50%;
-}
-
-.ted-controls {
-  clear: both;
 }
 
 .playlist {
@@ -63,9 +67,8 @@ body {
   }
 
   .annotations-text {
-    font-size: 19px;
+    font-size: 15px;
     font-weight: 300;
-    height: 160px;
     overflow-x: hidden;
     overflow-y: auto;
     position: absolute;
@@ -90,17 +93,14 @@ body {
       }
 
       .annotation-id {
-        font-size: 16px;
         line-height: 27px;
       }
 
       .annotation-start {
-        font-size: 16px;
         line-height: 27px;
       }
 
       .annotation-end {
-        font-size: 16px;
         line-height: 27px;
       }
 
@@ -109,6 +109,7 @@ body {
         white-space: pre;
         color: white;
         font-weight: 100;
+        font-size: 18px;
       }
 
       .annotation-actions {
@@ -125,7 +126,7 @@ body {
           }
 
           &:hover {
-            color: orange;
+            color: $red;
             cursor: pointer;
           }
         }
