@@ -2,7 +2,6 @@ const srtParser = require('subtitles-parser');
 
 require('bootstrap/dist/css/bootstrap.min.css');
 require('font-awesome/css/font-awesome.min.css');
-require('waveform-playlist/styles/playlist.scss');
 require('./app.scss');
 
 const createElement = require('virtual-dom/create-element');
