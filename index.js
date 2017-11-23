@@ -328,11 +328,6 @@ fetch('Mogensen.srt')
       ee.emit("automaticscroll", $(e.target).is(':checked'));
     });
 
-    function displayLoadingData(data) {
-      var info = $("<div/>").append(data);
-      $(".loading-data").append(info);
-    }
-
     /*
     * Code below receives updates from the playlist.
     */
@@ -342,7 +337,8 @@ fetch('Mogensen.srt')
     ee.on("timeupdate", updateTime);
 
     ee.on("audiosourcesrendered", function() {
-      displayLoadingData("Tracks have been rendered");
+      const overlay = document.querySelector('.overlay-loading');
+      overlay.remove();
     });
 
     ee.on('automaticscroll', (val) => {
