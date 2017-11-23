@@ -80,7 +80,7 @@ var actions = [
       // loop though and increment ids
       for (let idIndex = i + 2; idIndex < annotations.length; idIndex += 1) {
         let annotation = annotations[idIndex];
-        annotation.id = idIndex + 1;
+        annotation.id = `${idIndex + 1}`;
       }
     }
   },
@@ -97,7 +97,7 @@ var actions = [
       // loop though and decrement ids
       for (let idIndex = i; idIndex < annotations.length; idIndex += 1) {
         let annotation = annotations[idIndex];
-        annotation.id = idIndex + 1;
+        annotation.id = `${idIndex + 1}`;
       }
     }
   }
@@ -272,7 +272,25 @@ fetch('Mogensen.srt')
     updateTime(audioPos);
 
     $container.on("click", ".btn-annotations-download", function() {
-      ee.emit("annotationsrequest");
+      const output = playlist.annotationList.annotations.map((annotation) => {
+        return {
+          id: annotation.id,
+          startTime: annotation.start * 1000,
+          endTime: annotation.end * 1000,
+          text: annotation.lines.join('\n').trim()
+        }
+      });
+
+      const srtData = srtParser.toSrt(output);
+      const dataStr = `data:text/plain;charset=utf-8,${srtData}`;
+      const a = document.createElement('a');
+      const sec = Date.now();
+
+      document.body.appendChild(a);
+      a.href = dataStr;
+      a.download = `Mogensen-${sec}.srt`;
+      a.click();
+      document.body.removeChild(a);
     });
 
     $container.on("click", ".btn-play", function() {
