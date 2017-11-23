@@ -9370,12 +9370,24 @@ var AnnotationList = function () {
             note.start = 0;
           }
 
+          _this2.playlist.ee.emit('annotationchange', note, annotationIndex, _this2.annotations, {
+            linkEndpoints: _this2.playlist.linkEndpoints
+          });
+
           if (annotationIndex && annotations[annotationIndex - 1].end > note.start) {
             annotations[annotationIndex - 1].end = note.start;
+
+            _this2.playlist.ee.emit('annotationchange', annotations[annotationIndex - 1], annotationIndex - 1, _this2.annotations, {
+              linkEndpoints: _this2.playlist.linkEndpoints
+            });
           }
 
           if (_this2.playlist.linkEndpoints && annotationIndex && annotations[annotationIndex - 1].end === originalVal) {
             annotations[annotationIndex - 1].end = note.start;
+
+            _this2.playlist.ee.emit('annotationchange', annotations[annotationIndex - 1], annotationIndex - 1, _this2.annotations, {
+              linkEndpoints: _this2.playlist.linkEndpoints
+            });
           }
         } else {
           // resizing to the right
@@ -9386,12 +9398,24 @@ var AnnotationList = function () {
             note.end = _this2.playlist.duration;
           }
 
+          _this2.playlist.ee.emit('annotationchange', note, annotationIndex, _this2.annotations, {
+            linkEndpoints: _this2.playlist.linkEndpoints
+          });
+
           if (annotationIndex < annotations.length - 1 && annotations[annotationIndex + 1].start < note.end) {
             annotations[annotationIndex + 1].start = note.end;
+
+            _this2.playlist.ee.emit('annotationchange', annotations[annotationIndex + 1], annotationIndex + 1, _this2.annotations, {
+              linkEndpoints: _this2.playlist.linkEndpoints
+            });
           }
 
           if (_this2.playlist.linkEndpoints && annotationIndex < annotations.length - 1 && annotations[annotationIndex + 1].start === _originalVal) {
             annotations[annotationIndex + 1].start = note.end;
+
+            _this2.playlist.ee.emit('annotationchange', annotations[annotationIndex + 1], annotationIndex + 1, _this2.annotations, {
+              linkEndpoints: _this2.playlist.linkEndpoints
+            });
           }
         }
 
@@ -9534,7 +9558,9 @@ var AnnotationList = function () {
             // needed currently for references
             // eslint-disable-next-line no-param-reassign
             note.lines = e.target.innerText.split('\n');
-            _this4.playlist.ee.emit('annotationchange', note, i, _this4.annotations);
+            _this4.playlist.ee.emit('annotationchange', note, i, _this4.annotations, {
+              linkEndpoints: _this4.playlist.linkEndpoints
+            });
           },
           onkeypress: function onkeypress(e) {
             if (e.which === 13 || e.keyCode === 13) {
