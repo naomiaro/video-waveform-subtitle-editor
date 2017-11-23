@@ -11,7 +11,15 @@ body {
   width: 50%;
 }
 
+.ted-controls {
+  clear: both;
+}
+
 .playlist {
+  .state-cursor {
+    cursor: text;
+  }
+
   .playlist-time-scale {
     height: 30px;
   }
@@ -22,6 +30,10 @@ body {
 
   .channel {
     background: grey;
+  }
+
+  .selection.point {
+    background: $red;
   }
 
   .channel-progress {

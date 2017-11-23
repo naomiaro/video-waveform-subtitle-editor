@@ -101,7 +101,7 @@ fetch('/Mogensen.srt')
     playlist.setAudioContext(audioContext);
     playlist.setEventEmitter(EventEmitter());
     playlist.setTimeSelection(0, 0);
-    playlist.setState('select');
+    playlist.setState('cursor');
     playlist.setControlOptions({
         show: false,
         width: 150,
