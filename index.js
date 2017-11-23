@@ -74,6 +74,12 @@ var actions = [
     title: 'Delete annotation',
     action: (annotation, i, annotations) => {
       annotations.splice(i, 1);
+
+      // loop though and decrement ids
+      for (let idIndex = i; idIndex < annotations.length; idIndex += 1) {
+        let annotation = annotations[idIndex];
+        annotation.id = idIndex + 1;
+      }
     }
   }
 ];
