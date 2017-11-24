@@ -2368,7 +2368,7 @@ var _class = function () {
 
     this.fadeType = 'logarithmic';
     this.masterGain = 1;
-    this.annotations = [];
+    this.annotationList = [];
     this.durationFormat = 'hh:mm:ss.uuu';
     this.isAutomaticScroll = false;
     this.resetDrawTimer = undefined;
@@ -6401,8 +6401,8 @@ var TimeScale = function () {
       }, [timeMarkers, (0, _h2.default)('canvas', {
         attributes: {
           width: widthX,
-          height: 30,
-          style: 'position: absolute; left: 0; right: 0; top: 0; bottom: 0;'
+          height: 10,
+          style: 'position: absolute; left: 0; right: 0; bottom: 0;'
         },
         hook: new _TimeScaleHook2.default(canvasInfo, this.offset, this.samplesPerPixel, this.duration, this.color)
       })]);
