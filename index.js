@@ -176,22 +176,12 @@ fetch('Mogensen.srt')
       //can do stuff with the playlist.
     });
 
-    // START EVENTS COPY
-
-    /*
-     * This script is provided to give an example how the playlist can be controlled using the event emitter.
-     * This enables projects to create/control the useability of the project.
-    */
+    // SETUP EVENTS
+    // TODO PUT IN VIRTUAL DOM AS WELL
     var ee = playlist.getEventEmitter();
-    var $container = $("body");
-    var $timeFormat = $container.find('.time-format');
-    var $audioStart = $container.find('.audio-start');
-    var $audioEnd = $container.find('.audio-end');
-    var $time = $container.find('.audio-pos');
+    const currentDisplayTime = document.querySelector('.audio-pos');
 
     var format = "hh:mm:ss.uuu";
-    var startTime = 0;
-    var endTime = 0;
     var audioPos = 0;
     var playoutPromises;
     var stopVideoAt;
@@ -245,33 +235,18 @@ fetch('Mogensen.srt')
     }
 
     function updateSelect(start, end) {
-      if (start < end) {
-        $('.btn-trim-audio').removeClass('disabled');
-        $('.btn-loop').removeClass('disabled');
-      }
-      else {
-        $('.btn-trim-audio').addClass('disabled');
-        $('.btn-loop').addClass('disabled');
-      }
-
-      $audioStart.val(cueFormatters(format)(start));
-      $audioEnd.val(cueFormatters(format)(end));
-
-      startTime = start;
-      endTime = end;
       video.currentTime = start;
     }
 
     function updateTime(time) {
-      $time.html(cueFormatters(format)(time));
-
+      currentDisplayTime.innerHTML = cueFormatters(format)(time);
       audioPos = time;
     }
 
-    updateSelect(startTime, endTime);
     updateTime(audioPos);
 
-    $container.on("click", ".btn-annotations-download", function() {
+    const annotationsDownloadCtrl = document.querySelector('.btn-annotations-download');
+    annotationsDownloadCtrl.onclick = () => {
       const output = playlist.annotationList.annotations.map((annotation) => {
         return {
           id: annotation.id,
@@ -291,60 +266,46 @@ fetch('Mogensen.srt')
       a.download = `Mogensen-${sec}.srt`;
       a.click();
       document.body.removeChild(a);
-    });
+    };
 
-    $container.on("click", ".btn-play", function() {
+    const playCtrl = document.querySelector('.btn-play');
+    playCtrl.onclick = () => {
       ee.emit("play");
-    });
+    };
 
-    $container.on("click", ".btn-pause", function() {
+    const pauseCtrl = document.querySelector('.btn-pause');
+    pauseCtrl.onclick = () => {
       ee.emit("pause");
-    });
+    };
 
-    $container.on("click", ".btn-stop", function() {
+    const stopCtrl = document.querySelector('.btn-stop');
+    stopCtrl.onclick = () => {
       ee.emit("stop");
-    });
+    };
 
-    $container.on("click", ".btn-rewind", function() {
+    const rewindCtrl = document.querySelector('.btn-rewind');
+    rewindCtrl.onclick = () => {
       ee.emit("rewind");
-    });
+    };
 
-    $container.on("click", ".btn-fast-forward", function() {
+    const fastForwardCtrl = document.querySelector('.btn-fast-forward');
+    fastForwardCtrl.onclick = () => {
       ee.emit("fastforward");
-    });
+    };
 
-    //zoom buttons
-    $container.on("click", ".btn-zoom-in", function() {
-      ee.emit("zoomin");
-    });
-
-    $container.on("click", ".btn-zoom-out", function() {
-      ee.emit("zoomout");
-    });
-
-    $container.on("change", ".time-format", function(e) {
-      format = $timeFormat.val();
+    const timeFormatCtrl = document.querySelector('.time-format');
+    timeFormatCtrl.onchange = (e) => {
+      const format = e.target.value;
       ee.emit("durationformat", format);
 
       updateSelect(startTime, endTime);
       updateTime(audioPos);
-    });
+    };
 
-    $container.on("input change", ".master-gain", function(e){
-      ee.emit("mastervolumechange", e.target.value);
-    });
-
-    $container.on("change", ".continuous-play", function(e){
-      ee.emit("continuousplay", $(e.target).is(':checked'));
-    });
-
-    $container.on("change", ".link-endpoints", function(e){
-      ee.emit("linkendpoints", $(e.target).is(':checked'));
-    });
-
-    $container.on("change", ".automatic-scroll", function(e){
-      ee.emit("automaticscroll", $(e.target).is(':checked'));
-    });
+    const continuousPlayCtrl = document.querySelector('.continuous-play');
+    continuousPlayCtrl.onchange = (e) => {
+      ee.emit("continuousplay", e.target.checked);
+    };
 
     /*
     * Code below receives updates from the playlist.
@@ -418,26 +379,6 @@ fetch('Mogensen.srt')
       playlist.tracks.forEach((track) => {
         track.setMasterGainLevel(playlist.masterGain);
       });
-    });
-
-    ee.on('zoomin', () => {
-      const zoomIndex = Math.max(0, playlist.zoomIndex - 1);
-      const zoom = playlist.zoomLevels[zoomIndex];
-
-      if (zoom !== playlist.samplesPerPixel) {
-        playlist.setZoom(zoom);
-        playlist.drawRequest();
-      }
-    });
-
-    ee.on('zoomout', () => {
-      const zoomIndex = Math.min(playlist.zoomLevels.length - 1, playlist.zoomIndex + 1);
-      const zoom = playlist.zoomLevels[zoomIndex];
-
-      if (zoom !== playlist.samplesPerPixel) {
-        playlist.setZoom(zoom);
-        playlist.drawRequest();
-      }
     });
 
     ee.on('scroll', () => {
