@@ -991,10 +991,16 @@ var actions = [
   {
     class: 'fa.fa-minus.anno-end-minus',
     title: 'Reduce annotation end by 0.010s',
-    action: (annotation, i, annotations, opts) => {
+    action: function (annotation, i, annotations, opts) {
       var next;
       var delta = 0.010;
-      annotation.end -= delta;
+      annotations[i] = this.updateAnnotation(
+        annotation.id,
+        annotation.start,
+        annotation.end - delta,
+        annotation.lines,
+        annotation.lang
+      );
 
       // update text track cue
       const cue = cueList[i]
@@ -1002,15 +1008,23 @@ var actions = [
       const updatedCue = new VTTCue(annotation.start, annotation.end, annotation.lines.join('\n'));
       cueList[i] = updatedCue;
       captionTrack.addCue(updatedCue);
+
+      return annotations;
     }
   },
   {
     class: 'fa.fa-plus.anno-end-plus',
     title: 'Increase annotation end by 0.010s',
-    action: (annotation, i, annotations, opts) => {
+    action: function (annotation, i, annotations, opts) {
       var next;
       var delta = 0.010;
-      annotation.end += delta;
+      annotations[i] = this.updateAnnotation(
+        annotation.id,
+        annotation.start,
+        annotation.end + delta,
+        annotation.lines,
+        annotation.lang
+      );
 
       // update text track cue
       const cue = cueList[i]
@@ -1018,27 +1032,36 @@ var actions = [
       const updatedCue = new VTTCue(annotation.start, annotation.end, annotation.lines.join('\n'));
       cueList[i] = updatedCue;
       captionTrack.addCue(updatedCue);
+
+      return annotations;
     }
   },
   {
     class: 'fa.fa-scissors',
     title: 'Split annotation in half',
-    action: (annotation, i, annotations) => {
+    action: function (annotation, i, annotations) {
       const halfDuration = (annotation.end - annotation.start) / 2;
+      const newAnnotation = this.updateAnnotation(
+        i + 2,
+        annotation.end - halfDuration,
+        annotation.end,
+        ['----'],
+        annotation.lang
+      );
 
-      annotations.splice(i + 1, 0, {
-        id: i + 2,
-        start: annotation.end - halfDuration,
-        end: annotation.end,
-        lines: ['----'],
-        lang: 'en',
-      });
-
-      annotation.end = annotation.start + halfDuration;
+      annotations[i] = this.updateAnnotation(
+        annotation.id,
+        annotation.start,
+        annotation.start + halfDuration,
+        annotation.lines,
+        annotation.lang
+      );
+      annotations.splice(i + 1, 0, newAnnotation);
 
       // update text track cue
       captionTrack.removeCue(cueList[i]);
-      const updatedCueOne = new VTTCue(annotation.start, annotation.end, annotation.lines.join('\n'));
+      const annotationOne = annotations[i];
+      const updatedCueOne = new VTTCue(annotationOne.start, annotationOne.end, annotationOne.lines.join('\n'));
       const annotationTwo = annotations[i + 1];
       const updatedCueTwo = new VTTCue(annotationTwo.start, annotationTwo.end, annotationTwo.lines.join('\n'));
       captionTrack.addCue(updatedCueOne);
@@ -1052,12 +1075,14 @@ var actions = [
         let annotation = annotations[idIndex];
         annotation.id = `${idIndex + 1}`;
       }
+
+      return annotations;
     }
   },
   {
     class: 'fa.fa-trash',
     title: 'Delete annotation',
-    action: (annotation, i, annotations) => {
+    action: function (annotation, i, annotations) {
       annotations.splice(i, 1);
 
       // update text track cue
@@ -1069,6 +1094,8 @@ var actions = [
         let annotation = annotations[idIndex];
         annotation.id = `${idIndex + 1}`;
       }
+
+      return annotations;
     }
   }
 ];
@@ -1146,22 +1173,12 @@ fetch('Mogensen.srt')
       //can do stuff with the playlist.
     });
 
-    // START EVENTS COPY
-
-    /*
-     * This script is provided to give an example how the playlist can be controlled using the event emitter.
-     * This enables projects to create/control the useability of the project.
-    */
+    // SETUP EVENTS
+    // TODO PUT IN VIRTUAL DOM AS WELL
     var ee = playlist.getEventEmitter();
-    var $container = $("body");
-    var $timeFormat = $container.find('.time-format');
-    var $audioStart = $container.find('.audio-start');
-    var $audioEnd = $container.find('.audio-end');
-    var $time = $container.find('.audio-pos');
+    const currentDisplayTime = document.querySelector('.audio-pos');
 
     var format = "hh:mm:ss.uuu";
-    var startTime = 0;
-    var endTime = 0;
     var audioPos = 0;
     var playoutPromises;
     var stopVideoAt;
@@ -1215,33 +1232,18 @@ fetch('Mogensen.srt')
     }
 
     function updateSelect(start, end) {
-      if (start < end) {
-        $('.btn-trim-audio').removeClass('disabled');
-        $('.btn-loop').removeClass('disabled');
-      }
-      else {
-        $('.btn-trim-audio').addClass('disabled');
-        $('.btn-loop').addClass('disabled');
-      }
-
-      $audioStart.val(cueFormatters(format)(start));
-      $audioEnd.val(cueFormatters(format)(end));
-
-      startTime = start;
-      endTime = end;
       video.currentTime = start;
     }
 
     function updateTime(time) {
-      $time.html(cueFormatters(format)(time));
-
+      currentDisplayTime.innerHTML = cueFormatters(format)(time);
       audioPos = time;
     }
 
-    updateSelect(startTime, endTime);
     updateTime(audioPos);
 
-    $container.on("click", ".btn-annotations-download", function() {
+    const annotationsDownloadCtrl = document.querySelector('.btn-annotations-download');
+    annotationsDownloadCtrl.onclick = () => {
       const output = playlist.annotationList.annotations.map((annotation) => {
         return {
           id: annotation.id,
@@ -1261,60 +1263,46 @@ fetch('Mogensen.srt')
       a.download = `Mogensen-${sec}.srt`;
       a.click();
       document.body.removeChild(a);
-    });
+    };
 
-    $container.on("click", ".btn-play", function() {
+    const playCtrl = document.querySelector('.btn-play');
+    playCtrl.onclick = () => {
       ee.emit("play");
-    });
+    };
 
-    $container.on("click", ".btn-pause", function() {
+    const pauseCtrl = document.querySelector('.btn-pause');
+    pauseCtrl.onclick = () => {
       ee.emit("pause");
-    });
+    };
 
-    $container.on("click", ".btn-stop", function() {
+    const stopCtrl = document.querySelector('.btn-stop');
+    stopCtrl.onclick = () => {
       ee.emit("stop");
-    });
+    };
 
-    $container.on("click", ".btn-rewind", function() {
+    const rewindCtrl = document.querySelector('.btn-rewind');
+    rewindCtrl.onclick = () => {
       ee.emit("rewind");
-    });
+    };
 
-    $container.on("click", ".btn-fast-forward", function() {
+    const fastForwardCtrl = document.querySelector('.btn-fast-forward');
+    fastForwardCtrl.onclick = () => {
       ee.emit("fastforward");
-    });
+    };
 
-    //zoom buttons
-    $container.on("click", ".btn-zoom-in", function() {
-      ee.emit("zoomin");
-    });
-
-    $container.on("click", ".btn-zoom-out", function() {
-      ee.emit("zoomout");
-    });
-
-    $container.on("change", ".time-format", function(e) {
-      format = $timeFormat.val();
+    const timeFormatCtrl = document.querySelector('.time-format');
+    timeFormatCtrl.onchange = (e) => {
+      const format = e.target.value;
       ee.emit("durationformat", format);
 
       updateSelect(startTime, endTime);
       updateTime(audioPos);
-    });
+    };
 
-    $container.on("input change", ".master-gain", function(e){
-      ee.emit("mastervolumechange", e.target.value);
-    });
-
-    $container.on("change", ".continuous-play", function(e){
-      ee.emit("continuousplay", $(e.target).is(':checked'));
-    });
-
-    $container.on("change", ".link-endpoints", function(e){
-      ee.emit("linkendpoints", $(e.target).is(':checked'));
-    });
-
-    $container.on("change", ".automatic-scroll", function(e){
-      ee.emit("automaticscroll", $(e.target).is(':checked'));
-    });
+    const continuousPlayCtrl = document.querySelector('.continuous-play');
+    continuousPlayCtrl.onchange = (e) => {
+      ee.emit("continuousplay", e.target.checked);
+    };
 
     /*
     * Code below receives updates from the playlist.
@@ -1388,26 +1376,6 @@ fetch('Mogensen.srt')
       playlist.tracks.forEach((track) => {
         track.setMasterGainLevel(playlist.masterGain);
       });
-    });
-
-    ee.on('zoomin', () => {
-      const zoomIndex = Math.max(0, playlist.zoomIndex - 1);
-      const zoom = playlist.zoomLevels[zoomIndex];
-
-      if (zoom !== playlist.samplesPerPixel) {
-        playlist.setZoom(zoom);
-        playlist.drawRequest();
-      }
-    });
-
-    ee.on('zoomout', () => {
-      const zoomIndex = Math.min(playlist.zoomLevels.length - 1, playlist.zoomIndex + 1);
-      const zoom = playlist.zoomLevels[zoomIndex];
-
-      if (zoom !== playlist.samplesPerPixel) {
-        playlist.setZoom(zoom);
-        playlist.drawRequest();
-      }
     });
 
     ee.on('scroll', () => {
@@ -2336,11 +2304,11 @@ var _AnnotationList = __webpack_require__(115);
 
 var _AnnotationList2 = _interopRequireDefault(_AnnotationList);
 
-var _recorderWorker = __webpack_require__(121);
+var _recorderWorker = __webpack_require__(120);
 
 var _recorderWorker2 = _interopRequireDefault(_recorderWorker);
 
-var _exportWavWorker = __webpack_require__(122);
+var _exportWavWorker = __webpack_require__(121);
 
 var _exportWavWorker2 = _interopRequireDefault(_exportWavWorker);
 
@@ -2368,6 +2336,9 @@ var _class = function () {
 
     this.fadeType = 'logarithmic';
     this.masterGain = 1;
+    this.annotations = [];
+
+    // TODO remove this.
     this.annotationList = [];
     this.durationFormat = 'hh:mm:ss.uuu';
     this.isAutomaticScroll = false;
@@ -3303,9 +3274,13 @@ var _class = function () {
           style: 'overflow: auto; position: relative;'
         },
         onscroll: function onscroll(e) {
+          var prev = _this16.scrollLeft;
+
           _this16.scrollLeft = (0, _conversions.pixelsToSeconds)(e.target.scrollLeft, _this16.samplesPerPixel, _this16.sampleRate);
 
-          _this16.ee.emit('scroll', _this16.scrollLeft);
+          if (prev !== _this16.scrollLeft) {
+            _this16.ee.emit('scroll', _this16.scrollLeft);
+          }
         },
         hook: new _ScrollHook2.default(this)
       }, trackElements);
@@ -3321,7 +3296,7 @@ var _class = function () {
 
       containerChildren.push(this.renderTrackSection());
 
-      if (this.annotationList.length) {
+      if (this.annotations.length) {
         containerChildren.push(this.renderAnnotations());
       }
 
@@ -6230,6 +6205,7 @@ var _class = function () {
 
             if (cursorRect.right > rect.right) {
               playlist.scrollLeft = Math.min(playlist.playbackSeconds, MAX_SCROLL_LEFT);
+              playlist.ee.emit('scroll', playlist.scrollLeft);
             }
           }
         }
@@ -9301,15 +9277,11 @@ var _aeneas4 = _interopRequireDefault(_aeneas3);
 
 var _conversions = __webpack_require__(0);
 
-var _DragInteraction = __webpack_require__(118);
-
-var _DragInteraction2 = _interopRequireDefault(_DragInteraction);
-
-var _ScrollTopHook = __webpack_require__(119);
+var _ScrollTopHook = __webpack_require__(118);
 
 var _ScrollTopHook2 = _interopRequireDefault(_ScrollTopHook);
 
-var _timeformat = __webpack_require__(120);
+var _timeformat = __webpack_require__(119);
 
 var _timeformat2 = _interopRequireDefault(_timeformat);
 
@@ -9321,48 +9293,62 @@ var AnnotationList = function () {
   function AnnotationList(playlist, annotations) {
     var controls = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : [];
     var editable = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : false;
+
+    var _this = this;
+
     var linkEndpoints = arguments.length > 4 && arguments[4] !== undefined ? arguments[4] : false;
     var isContinuousPlay = arguments.length > 5 && arguments[5] !== undefined ? arguments[5] : false;
 
     _classCallCheck(this, AnnotationList);
 
     this.playlist = playlist;
-    this.resizeHandlers = [];
     this.editable = editable;
-    this.annotations = annotations.map(function (a) {
-      return (
-        // TODO support different formats later on.
-        (0, _aeneas2.default)(a)
-      );
+    this.timeFormatter = (0, _timeformat2.default)(this.playlist.durationFormat);
+    this.playlist.annotations = annotations.map(function (a) {
+      // TODO support different formats later on.
+      var note = (0, _aeneas2.default)(a);
+      return _this.updateAnnotation(note.id, note.start, note.end, note.lines, note.lang);
     });
-    this.setupInteractions();
-
     this.controls = controls;
     this.setupEE(playlist.ee);
 
     // TODO actually make a real plugin system that's not terrible.
     this.playlist.isContinuousPlay = isContinuousPlay;
     this.playlist.linkEndpoints = linkEndpoints;
-    this.length = this.annotations.length;
+    this.playlist.updateAnnotation = this.updateAnnotation.bind(this);
+
+    this.prevX = 0;
+    this.dragging = false;
+    document.addEventListener('dragover', this.ondragover.bind(this));
   }
 
   _createClass(AnnotationList, [{
-    key: 'setupInteractions',
-    value: function setupInteractions() {
-      var _this = this;
+    key: 'updateAnnotation',
+    value: function updateAnnotation(id, start, end, lines, lang) {
+      var samplesPerPixel = this.playlist.samplesPerPixel;
+      var sampleRate = this.playlist.sampleRate;
+      var pixPerSec = sampleRate / samplesPerPixel;
+      var pixOffset = (0, _conversions.secondsToPixels)(this.playlist.scrollLeft, samplesPerPixel, sampleRate);
+      var left = Math.floor(start * pixPerSec - pixOffset);
+      var width = Math.ceil(end * pixPerSec - start * pixPerSec);
 
-      this.annotations.forEach(function (a, i) {
-        var leftShift = new _DragInteraction2.default(_this.playlist, {
-          direction: 'left',
-          index: i
-        });
-        var rightShift = new _DragInteraction2.default(_this.playlist, {
-          direction: 'right',
-          index: i
-        });
-
-        _this.resizeHandlers.push(leftShift);
-        _this.resizeHandlers.push(rightShift);
+      return {
+        id: id,
+        start: start,
+        end: end,
+        lines: lines,
+        lang: lang,
+        left: left,
+        width: width,
+        displayStart: this.timeFormatter(start),
+        displayEnd: this.timeFormatter(end)
+      };
+    }
+  }, {
+    key: 'emitAnnotationChange',
+    value: function emitAnnotationChange(note, index) {
+      this.playlist.ee.emit('annotationchange', note, index, this.playlist.annotations, {
+        linkEndpoints: this.playlist.linkEndpoints
       });
     }
   }, {
@@ -9370,13 +9356,12 @@ var AnnotationList = function () {
     value: function setupEE(ee) {
       var _this2 = this;
 
-      ee.on('dragged', function (deltaTime, data) {
-        var annotationIndex = data.index;
-        var annotations = _this2.annotations;
+      ee.on('dragged', function (deltaTime, annotationIndex, direction) {
+        var annotations = _this2.playlist.annotations;
         var note = annotations[annotationIndex];
 
         // resizing to the left
-        if (data.direction === 'left') {
+        if (direction === 'left') {
           var originalVal = note.start;
           note.start += deltaTime;
 
@@ -9384,24 +9369,23 @@ var AnnotationList = function () {
             note.start = 0;
           }
 
-          _this2.playlist.ee.emit('annotationchange', note, annotationIndex, _this2.annotations, {
-            linkEndpoints: _this2.playlist.linkEndpoints
-          });
+          annotations[annotationIndex] = _this2.updateAnnotation(note.id, note.start, note.end, note.lines, note.lang);
+          _this2.emitAnnotationChange(annotations[annotationIndex], annotationIndex);
 
-          if (annotationIndex && annotations[annotationIndex - 1].end > note.start) {
-            annotations[annotationIndex - 1].end = note.start;
+          if (annotationIndex && annotations[annotationIndex - 1].end > annotations[annotationIndex].start) {
+            annotations[annotationIndex - 1].end = annotations[annotationIndex].start;
 
-            _this2.playlist.ee.emit('annotationchange', annotations[annotationIndex - 1], annotationIndex - 1, _this2.annotations, {
-              linkEndpoints: _this2.playlist.linkEndpoints
-            });
+            var _note = annotations[annotationIndex - 1];
+            annotations[annotationIndex - 1] = _this2.updateAnnotation(_note.id, _note.start, _note.end, _note.lines, _note.lang);
+            _this2.emitAnnotationChange(annotations[annotationIndex - 1], annotationIndex - 1);
           }
 
           if (_this2.playlist.linkEndpoints && annotationIndex && annotations[annotationIndex - 1].end === originalVal) {
-            annotations[annotationIndex - 1].end = note.start;
+            annotations[annotationIndex - 1].end = annotations[annotationIndex].start;
 
-            _this2.playlist.ee.emit('annotationchange', annotations[annotationIndex - 1], annotationIndex - 1, _this2.annotations, {
-              linkEndpoints: _this2.playlist.linkEndpoints
-            });
+            var _note2 = annotations[annotationIndex - 1];
+            annotations[annotationIndex - 1] = _this2.updateAnnotation(_note2.id, _note2.start, _note2.end, _note2.lines, _note2.lang);
+            _this2.emitAnnotationChange(annotations[annotationIndex - 1], annotationIndex - 1);
           }
         } else {
           // resizing to the right
@@ -9412,24 +9396,23 @@ var AnnotationList = function () {
             note.end = _this2.playlist.duration;
           }
 
-          _this2.playlist.ee.emit('annotationchange', note, annotationIndex, _this2.annotations, {
-            linkEndpoints: _this2.playlist.linkEndpoints
-          });
+          annotations[annotationIndex] = _this2.updateAnnotation(note.id, note.start, note.end, note.lines, note.lang);
+          _this2.emitAnnotationChange(annotations[annotationIndex], annotationIndex);
 
-          if (annotationIndex < annotations.length - 1 && annotations[annotationIndex + 1].start < note.end) {
-            annotations[annotationIndex + 1].start = note.end;
+          if (annotationIndex < annotations.length - 1 && annotations[annotationIndex + 1].start < annotations[annotationIndex].end) {
+            annotations[annotationIndex + 1].start = annotations[annotationIndex].end;
 
-            _this2.playlist.ee.emit('annotationchange', annotations[annotationIndex + 1], annotationIndex + 1, _this2.annotations, {
-              linkEndpoints: _this2.playlist.linkEndpoints
-            });
+            var _note3 = annotations[annotationIndex + 1];
+            annotations[annotationIndex + 1] = _this2.updateAnnotation(_note3.id, _note3.start, _note3.end, _note3.lines, _note3.lang);
+            _this2.emitAnnotationChange(annotations[annotationIndex + 1], annotationIndex + 1);
           }
 
           if (_this2.playlist.linkEndpoints && annotationIndex < annotations.length - 1 && annotations[annotationIndex + 1].start === _originalVal) {
-            annotations[annotationIndex + 1].start = note.end;
+            annotations[annotationIndex + 1].start = annotations[annotationIndex].end;
 
-            _this2.playlist.ee.emit('annotationchange', annotations[annotationIndex + 1], annotationIndex + 1, _this2.annotations, {
-              linkEndpoints: _this2.playlist.linkEndpoints
-            });
+            var _note4 = annotations[annotationIndex + 1];
+            annotations[annotationIndex + 1] = _this2.updateAnnotation(_note4.id, _note4.start, _note4.end, _note4.lines, _note4.lang);
+            _this2.emitAnnotationChange(annotations[annotationIndex + 1], annotationIndex + 1);
           }
         }
 
@@ -9448,12 +9431,28 @@ var AnnotationList = function () {
         _this2.export();
       });
 
+      ee.on('scroll', function () {
+        _this2.boxesCache = null;
+        _this2.playlist.annotations = _this2.playlist.annotations.map(function (note) {
+          return _this2.updateAnnotation(note.id, note.start, note.end, note.lines, note.lang);
+        });
+        _this2.playlist.drawRequest();
+      });
+
+      ee.on('durationformat', function (format) {
+        _this2.timeFormatter = (0, _timeformat2.default)(format);
+        _this2.playlist.annotations = _this2.playlist.annotations.map(function (note) {
+          return _this2.updateAnnotation(note.id, note.start, note.end, note.lines, note.lang);
+        });
+        _this2.playlist.drawRequest();
+      });
+
       return ee;
     }
   }, {
     key: 'export',
     value: function _export() {
-      var output = this.annotations.map(function (a) {
+      var output = this.playlist.annotations.map(function (a) {
         return (0, _aeneas4.default)(a);
       });
       var dataStr = 'data:text/json;charset=utf-8,' + encodeURIComponent(JSON.stringify(output));
@@ -9466,99 +9465,128 @@ var AnnotationList = function () {
       document.body.removeChild(a);
     }
   }, {
-    key: 'renderResizeLeft',
-    value: function renderResizeLeft(i) {
-      var events = _DragInteraction2.default.getEvents();
-      var config = { attributes: {
-          style: 'position: absolute; height: 30px; width: 10px; top: 0; left: -2px',
-          draggable: true
-        } };
-      var handler = this.resizeHandlers[i * 2];
+    key: 'ondragover',
+    value: function ondragover(e) {
+      if (this.dragging) {
+        var x = e.clientX;
+        var deltaX = x - this.prevX;
 
-      events.forEach(function (event) {
-        config['on' + event] = handler[event].bind(handler);
-      });
-
-      return (0, _h2.default)('div.resize-handle.resize-w', config);
+        // emit shift event if not 0
+        if (deltaX) {
+          var deltaTime = (0, _conversions.pixelsToSeconds)(deltaX, this.playlist.samplesPerPixel, this.playlist.sampleRate);
+          this.prevX = x;
+          this.playlist.ee.emit('dragged', deltaTime, this.draggingIndex, this.draggingDirection);
+        }
+      }
     }
   }, {
-    key: 'renderResizeRight',
-    value: function renderResizeRight(i) {
-      var events = _DragInteraction2.default.getEvents();
-      var config = { attributes: {
-          style: 'position: absolute; height: 30px; width: 10px; top: 0; right: -2px',
-          draggable: true
-        } };
-      var handler = this.resizeHandlers[i * 2 + 1];
-
-      events.forEach(function (event) {
-        config['on' + event] = handler[event].bind(handler);
-      });
-
-      return (0, _h2.default)('div.resize-handle.resize-e', config);
-    }
-  }, {
-    key: 'renderControls',
-    value: function renderControls(note, i) {
+    key: 'renderBoxes',
+    value: function renderBoxes() {
       var _this3 = this;
 
-      // seems to be a bug with references, or I'm missing something.
-      var that = this;
-      return this.controls.map(function (ctrl) {
-        return (0, _h2.default)('i.' + ctrl.class, {
-          attributes: {
-            title: ctrl.title
-          },
-          onclick: function onclick() {
-            ctrl.action(note, i, that.annotations, {
-              linkEndpoints: that.playlist.linkEndpoints
-            });
-            _this3.setupInteractions();
-            that.playlist.drawRequest();
+      if (this.boxesCache) {
+        return this.boxesCache;
+      }
+
+      var boxes = (0, _h2.default)('div.annotations-boxes', {
+        attributes: {
+          style: 'height: 30px; overflow: hidden; position: relative;'
+        },
+        onclick: function onclick(e) {
+          var el = e.target;
+          if (el.classList.contains('id')) {
+            var i = parseInt(el.parentNode.dataset.index, 10);
+            if (_this3.playlist.isContinuousPlay) {
+              _this3.playlist.ee.emit('play', _this3.playlist.annotations[i].start);
+            } else {
+              _this3.playlist.ee.emit('play', _this3.playlist.annotations[i].start, _this3.playlist.annotations[i].end);
+            }
           }
-        });
-      });
+        },
+        ondragstart: function ondragstart(e) {
+          var el = e.target;
+          var index = parseInt(e.target.parentNode.dataset.index, 10);
+          var direction = e.target.dataset.direction;
+          if (el.classList.contains('resize-handle')) {
+            _this3.prevX = e.clientX;
+
+            e.dataTransfer.dropEffect = 'move';
+            e.dataTransfer.effectAllowed = 'move';
+            e.dataTransfer.setData('text/plain', '');
+            _this3.dragging = true;
+            _this3.draggingIndex = index;
+            _this3.draggingDirection = direction;
+          }
+        },
+        ondragend: function ondragend(e) {
+          var el = e.target;
+          if (el.classList.contains('resize-handle')) {
+            e.preventDefault();
+            _this3.dragging = false;
+          }
+        }
+      }, this.playlist.annotations.map(function (note, i) {
+        return (0, _h2.default)('div.annotation-box', {
+          attributes: {
+            style: 'position: absolute; height: 30px; width: ' + note.width + 'px; left: ' + note.left + 'px',
+            'data-index': i
+          }
+        }, [(0, _h2.default)('div.resize-handle.resize-w', {
+          attributes: {
+            style: 'position: absolute; height: 30px; width: 10px; top: 0; left: -2px',
+            draggable: true,
+            'data-direction': 'left'
+          }
+        }), (0, _h2.default)('span.id', [note.id]), (0, _h2.default)('div.resize-handle.resize-e', {
+          attributes: {
+            style: 'position: absolute; height: 30px; width: 10px; top: 0; right: -2px',
+            draggable: true,
+            'data-direction': 'right'
+          }
+        })]);
+      }));
+
+      this.boxesCache = boxes;
+      return boxes;
     }
   }, {
     key: 'render',
     value: function render() {
       var _this4 = this;
 
-      var boxes = (0, _h2.default)('div.annotations-boxes', {
-        attributes: {
-          style: 'height: 30px; overflow: hidden; position: relative;'
-        }
-      }, this.annotations.map(function (note, i) {
-        var samplesPerPixel = _this4.playlist.samplesPerPixel;
-        var sampleRate = _this4.playlist.sampleRate;
-        var pixPerSec = sampleRate / samplesPerPixel;
-        var pixOffset = (0, _conversions.secondsToPixels)(_this4.playlist.scrollLeft, samplesPerPixel, sampleRate);
-        var left = Math.floor(note.start * pixPerSec - pixOffset);
-        var width = Math.ceil(note.end * pixPerSec - note.start * pixPerSec);
-
-        return (0, _h2.default)('div.annotation-box', {
-          attributes: {
-            style: 'position: absolute; height: 30px; width: ' + width + 'px; left: ' + left + 'px',
-            'data-id': note.id
-          }
-        }, [_this4.renderResizeLeft(i), (0, _h2.default)('span.id', {
-          onclick: function onclick() {
-            if (_this4.playlist.isContinuousPlay) {
-              _this4.playlist.ee.emit('play', _this4.annotations[i].start);
-            } else {
-              _this4.playlist.ee.emit('play', _this4.annotations[i].start, _this4.annotations[i].end);
-            }
-          }
-        }, [note.id]), _this4.renderResizeRight(i)]);
-      }));
-
       var text = (0, _h2.default)('div.annotations-text', {
-        hook: new _ScrollTopHook2.default()
-      }, this.annotations.map(function (note, i) {
-        var format = (0, _timeformat2.default)(_this4.playlist.durationFormat);
-        var start = format(note.start);
-        var end = format(note.end);
+        hook: new _ScrollTopHook2.default(),
+        onclick: function onclick(e) {
+          var el = e.target;
+          if (el.classList.contains('anno-ctrl')) {
+            var annotationIndex = parseInt(el.parentNode.parentNode.dataset.index, 10);
+            var ctrl = parseInt(el.dataset.ctrl, 10);
+            var annotations = _this4.playlist.annotations;
+            _this4.controls[ctrl].action.call(_this4.playlist, annotations[annotationIndex], annotationIndex, annotations, {
+              linkEndpoints: _this4.playlist.linkEndpoints
+            });
+            _this4.playlist.drawRequest();
+          }
+        },
+        onkeypress: function onkeypress(e) {
+          if (e.which === 13 || e.keyCode === 13) {
+            e.target.blur();
+            e.preventDefault();
+          }
+        },
+        oninput: function oninput(e) {
+          var el = e.target;
+          var annotationIndex = parseInt(el.parentNode.dataset.index, 10);
+          var annotations = _this4.playlist.annotations;
+          var note = annotations[annotationIndex];
+          var lines = e.target.innerText.split('\n');
 
+          annotations[annotationIndex] = _this4.updateAnnotation(note.id, note.start, note.end, lines, note.lang);
+          _this4.playlist.ee.emit('annotationchange', annotations[annotationIndex], annotationIndex, annotations, {
+            linkEndpoints: _this4.playlist.linkEndpoints
+          });
+        }
+      }, this.playlist.annotations.map(function (note, i, annotations) {
         var segmentClass = '';
         if (_this4.playlist.isPlaying() && _this4.playlist.playbackSeconds >= note.start && _this4.playlist.playbackSeconds <= note.end) {
           segmentClass = '.current';
@@ -9567,29 +9595,26 @@ var AnnotationList = function () {
         var editableConfig = {
           attributes: {
             contenteditable: true
-          },
-          oninput: function oninput(e) {
-            // needed currently for references
-            // eslint-disable-next-line no-param-reassign
-            note.lines = e.target.innerText.split('\n');
-            _this4.playlist.ee.emit('annotationchange', note, i, _this4.annotations, {
-              linkEndpoints: _this4.playlist.linkEndpoints
-            });
-          },
-          onkeypress: function onkeypress(e) {
-            if (e.which === 13 || e.keyCode === 13) {
-              e.target.blur();
-              e.preventDefault();
-            }
           }
         };
 
         var linesConfig = _this4.editable ? editableConfig : {};
 
-        return (0, _h2.default)('div.annotation' + segmentClass, [(0, _h2.default)('span.annotation-id', [note.id]), (0, _h2.default)('span.annotation-start', [start]), (0, _h2.default)('span.annotation-end', [end]), (0, _h2.default)('span.annotation-lines', linesConfig, [note.lines.join('\n')]), (0, _h2.default)('span.annotation-actions', _this4.renderControls(note, i))]);
+        return (0, _h2.default)('div.annotation' + segmentClass, {
+          attributes: {
+            'data-index': i
+          }
+        }, [(0, _h2.default)('span.annotation-id', [note.id]), (0, _h2.default)('span.annotation-start', [note.displayStart]), (0, _h2.default)('span.annotation-end', [note.displayEnd]), (0, _h2.default)('span.annotation-lines', linesConfig, [note.lines.join('\n')]), (0, _h2.default)('span.annotation-actions', _this4.controls.map(function (ctrl, ctrlIndex) {
+          return (0, _h2.default)('i.' + ctrl.class + '.anno-ctrl', {
+            attributes: {
+              title: ctrl.title,
+              'data-ctrl': ctrlIndex
+            }
+          });
+        }))]);
       }));
 
-      return [boxes, text];
+      return [this.renderBoxes(), text];
     }
   }]);
 
@@ -9658,98 +9683,6 @@ exports.default = function (annotation) {
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-var _conversions = __webpack_require__(0);
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-var _class = function () {
-  function _class(playlist) {
-    var _this = this;
-
-    var data = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
-
-    _classCallCheck(this, _class);
-
-    this.playlist = playlist;
-    this.data = data;
-    this.active = false;
-
-    this.ondragover = function (e) {
-      if (_this.active) {
-        e.preventDefault();
-        _this.emitDrag(e.clientX);
-      }
-    };
-  }
-
-  _createClass(_class, [{
-    key: 'emitDrag',
-    value: function emitDrag(x) {
-      var deltaX = x - this.prevX;
-
-      // emit shift event if not 0
-      if (deltaX) {
-        var deltaTime = (0, _conversions.pixelsToSeconds)(deltaX, this.playlist.samplesPerPixel, this.playlist.sampleRate);
-        this.prevX = x;
-        this.playlist.ee.emit('dragged', deltaTime, this.data);
-      }
-    }
-  }, {
-    key: 'complete',
-    value: function complete() {
-      this.active = false;
-      document.removeEventListener('dragover', this.ondragover);
-    }
-  }, {
-    key: 'dragstart',
-    value: function dragstart(e) {
-      var ev = e;
-      this.active = true;
-      this.prevX = e.clientX;
-
-      ev.dataTransfer.dropEffect = 'move';
-      ev.dataTransfer.effectAllowed = 'move';
-      ev.dataTransfer.setData('text/plain', '');
-      document.addEventListener('dragover', this.ondragover);
-    }
-  }, {
-    key: 'dragend',
-    value: function dragend(e) {
-      if (this.active) {
-        e.preventDefault();
-        this.complete();
-      }
-    }
-  }], [{
-    key: 'getClass',
-    value: function getClass() {
-      return '.shift';
-    }
-  }, {
-    key: 'getEvents',
-    value: function getEvents() {
-      return ['dragstart', 'dragend'];
-    }
-  }]);
-
-  return _class;
-}();
-
-exports.default = _class;
-
-/***/ }),
-/* 119 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
 /*
 * virtual-dom hook for scrolling to the text annotation.
 */
@@ -9768,7 +9701,7 @@ Hook.prototype.hook = function hook(node) {
 exports.default = Hook;
 
 /***/ }),
-/* 120 */
+/* 119 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -9817,7 +9750,7 @@ exports.default = function (format) {
 };
 
 /***/ }),
-/* 121 */
+/* 120 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -9933,7 +9866,7 @@ exports.default = function () {
 };
 
 /***/ }),
-/* 122 */
+/* 121 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";

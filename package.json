@@ -8,7 +8,8 @@
     "webpack:server": "webpack-dev-server --content-base dist/ --colors --host 0.0.0.0 --inline",
     "build": "webpack",
     "deploy": "gh-pages -d dist",
-    "start": "npm run webpack:server"
+    "start": "npm run webpack:server",
+    "local": "node ./bin/www"
   },
   "repository": {
     "type": "git",
@@ -42,10 +43,17 @@
   "dependencies": {
     "bootstrap": "^3.3.7",
     "event-emitter": "^0.3.5",
+    "express": "~4.15.5",
     "font-awesome": "^4.7.0",
     "isomorphic-fetch": "^2.2.1",
     "subtitles-parser": "0.0.2",
     "virtual-dom": "^2.1.1",
-    "waveform-playlist": "^3.0.4"
+    "waveform-playlist": "^3.0.4",
+    "body-parser": "~1.18.2",
+    "cookie-parser": "~1.4.3",
+    "debug": "~2.6.9",
+    "hbs": "~4.0.1",
+    "morgan": "~1.9.0",
+    "serve-favicon": "~2.4.5"
   }
 }
