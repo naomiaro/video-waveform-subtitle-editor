@@ -21,10 +21,16 @@ var actions = [
   {
     class: 'fa.fa-minus.anno-end-minus',
     title: 'Reduce annotation end by 0.010s',
-    action: (annotation, i, annotations, opts) => {
+    action: function (annotation, i, annotations, opts) {
       var next;
       var delta = 0.010;
-      annotation.end -= delta;
+      annotations[i] = this.updateAnnotation(
+        annotation.id,
+        annotation.start,
+        annotation.end - delta,
+        annotation.lines,
+        annotation.lang
+      );
 
       // update text track cue
       const cue = cueList[i]
@@ -32,15 +38,23 @@ var actions = [
       const updatedCue = new VTTCue(annotation.start, annotation.end, annotation.lines.join('\n'));
       cueList[i] = updatedCue;
       captionTrack.addCue(updatedCue);
+
+      return annotations;
     }
   },
   {
     class: 'fa.fa-plus.anno-end-plus',
     title: 'Increase annotation end by 0.010s',
-    action: (annotation, i, annotations, opts) => {
+    action: function (annotation, i, annotations, opts) {
       var next;
       var delta = 0.010;
-      annotation.end += delta;
+      annotations[i] = this.updateAnnotation(
+        annotation.id,
+        annotation.start,
+        annotation.end + delta,
+        annotation.lines,
+        annotation.lang
+      );
 
       // update text track cue
       const cue = cueList[i]
@@ -48,27 +62,36 @@ var actions = [
       const updatedCue = new VTTCue(annotation.start, annotation.end, annotation.lines.join('\n'));
       cueList[i] = updatedCue;
       captionTrack.addCue(updatedCue);
+
+      return annotations;
     }
   },
   {
     class: 'fa.fa-scissors',
     title: 'Split annotation in half',
-    action: (annotation, i, annotations) => {
+    action: function (annotation, i, annotations) {
       const halfDuration = (annotation.end - annotation.start) / 2;
+      const newAnnotation = this.updateAnnotation(
+        i + 2,
+        annotation.end - halfDuration,
+        annotation.end,
+        ['----'],
+        annotation.lang
+      );
 
-      annotations.splice(i + 1, 0, {
-        id: i + 2,
-        start: annotation.end - halfDuration,
-        end: annotation.end,
-        lines: ['----'],
-        lang: 'en',
-      });
-
-      annotation.end = annotation.start + halfDuration;
+      annotations[i] = this.updateAnnotation(
+        annotation.id,
+        annotation.start,
+        annotation.start + halfDuration,
+        annotation.lines,
+        annotation.lang
+      );
+      annotations.splice(i + 1, 0, newAnnotation);
 
       // update text track cue
       captionTrack.removeCue(cueList[i]);
-      const updatedCueOne = new VTTCue(annotation.start, annotation.end, annotation.lines.join('\n'));
+      const annotationOne = annotations[i];
+      const updatedCueOne = new VTTCue(annotationOne.start, annotationOne.end, annotationOne.lines.join('\n'));
       const annotationTwo = annotations[i + 1];
       const updatedCueTwo = new VTTCue(annotationTwo.start, annotationTwo.end, annotationTwo.lines.join('\n'));
       captionTrack.addCue(updatedCueOne);
@@ -82,12 +105,14 @@ var actions = [
         let annotation = annotations[idIndex];
         annotation.id = `${idIndex + 1}`;
       }
+
+      return annotations;
     }
   },
   {
     class: 'fa.fa-trash',
     title: 'Delete annotation',
-    action: (annotation, i, annotations) => {
+    action: function (annotation, i, annotations) {
       annotations.splice(i, 1);
 
       // update text track cue
@@ -99,6 +124,8 @@ var actions = [
         let annotation = annotations[idIndex];
         annotation.id = `${idIndex + 1}`;
       }
+
+      return annotations;
     }
   }
 ];
