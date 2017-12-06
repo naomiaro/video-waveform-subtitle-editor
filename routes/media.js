@@ -1,17 +1,23 @@
 const express = require('express');
-const router = express.Router();
-
+const path = require('path');
 const Queue = require('bee-queue');
-const queue = new Queue('ytdl');
 
+const router = express.Router();
+const queue = new Queue('ytdl');
 const VIDEO_ITAG = 43;
 
-/* GET users listing. */
-router.get('/:id', function(req, res, next) {
-  const ytId = req.params.id;
+router.get('/', function(req, res, next) {
+  res.render('media');
+});
+
+router.post('/', function(req, res, next) {
+  const srtFile = req.files.srt;
+  const ytid = req.body.ytid;
   const job = queue.createJob({
     videoItag: VIDEO_ITAG
-  }).setId(ytId);
+  }).setId(ytid);
+
+  console.log(srtFile.name);
 
   job.on('succeeded', function (result) {
     console.log('completed job ' + job.id);
@@ -30,12 +36,11 @@ router.get('/:id', function(req, res, next) {
     console.log(`Job ${job.id} failed with error ${err.message}`);
   });
 
-  job.save(function (err, job) {
-    if (err) {
-      console.log('job failed to save');
-      return res.send('job failed to save');
-    }
-    console.log('saved job ' + job.id);
+  Promise.all([
+    srtFile.mv(path.join(__dirname, '..', 'dist', `${ytid}.srt`)),
+    job.save()
+  ]).catch((err) => {
+    console.log(`${err.message}`);
   });
 });
 

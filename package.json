@@ -48,6 +48,7 @@
     "debug": "~2.6.9",
     "event-emitter": "^0.3.5",
     "express": "~4.15.5",
+    "express-fileupload": "^0.3.0",
     "fluent-ffmpeg": "^2.1.2",
     "font-awesome": "^4.7.0",
     "hbs": "~4.0.1",
