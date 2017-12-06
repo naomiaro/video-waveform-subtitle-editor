@@ -41,19 +41,23 @@
     "webpack-dev-server": "^2.9.4"
   },
   "dependencies": {
+    "bee-queue": "^1.1.0",
+    "body-parser": "~1.18.2",
     "bootstrap": "^3.3.7",
+    "cookie-parser": "~1.4.3",
+    "debug": "~2.6.9",
     "event-emitter": "^0.3.5",
     "express": "~4.15.5",
+    "ffmpeg": "0.0.4",
     "font-awesome": "^4.7.0",
+    "hbs": "~4.0.1",
     "isomorphic-fetch": "^2.2.1",
+    "morgan": "~1.9.0",
+    "qs": "^6.5.1",
+    "serve-favicon": "~2.4.5",
     "subtitles-parser": "0.0.2",
     "virtual-dom": "^2.1.1",
     "waveform-playlist": "^3.0.4",
-    "body-parser": "~1.18.2",
-    "cookie-parser": "~1.4.3",
-    "debug": "~2.6.9",
-    "hbs": "~4.0.1",
-    "morgan": "~1.9.0",
-    "serve-favicon": "~2.4.5"
+    "ytdl-core": "^0.18.3"
   }
 }

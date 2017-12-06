@@ -1,4 +1,5 @@
 const srtParser = require('subtitles-parser');
+const qs = require('qs');
 
 require('bootstrap/dist/css/bootstrap.min.css');
 require('font-awesome/css/font-awesome.min.css');
