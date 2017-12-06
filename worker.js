@@ -1,7 +1,7 @@
 const fs = require('fs');
 const ytdl = require('ytdl-core');
 const Queue = require('bee-queue');
-const ffmpeg = require('ffmpeg');
+const ffmpeg = require('fluent-ffmpeg');
 const queue = new Queue('ytdl', {
   removeOnSuccess: true,
   removeOnFailure: true,
@@ -9,65 +9,33 @@ const queue = new Queue('ytdl', {
 
 queue.on('ready', function () {
   queue.process(function (job, done) {
-    console.log('processing job ' + job.id);
+    console.log(`processing job ${job.id} with itag ${job.data.videoItag}`);
 
-    const videoPath = __dirname + '/dist/script_video.webm';
-    const audioPath = __dirname + '/dist/script_audio.webm';
+    const videoPath = `${__dirname}/dist/${job.id}.webm`;
+    const audioPath = `${__dirname}/dist/${job.id}.ogg`;
 
     const stream = ytdl(`http://www.youtube.com/watch?v=${job.id}`, {
-      quality: job.videoQuality
+      quality: job.data.videoItag
     }).pipe(fs.createWriteStream(videoPath));
 
     stream.on('finish', () => {
       console.log('ytdl finished streaming.');
 
-      try {
-        const ytdlVideo = new ffmpeg(videoPath, function (err, video) {
-          if (!err) {
-            console.log('The video is ready to be processed');
-
-            video
-              .addCommand('-acodec', 'copy')
-              .addCommand('-vn')
-              .save(audioPath, function (err, file) {
-                if (err) {
-                  done(err);
-                } else {
-                  console.log('Video file: ' + file);
-                  done(null, {videoPath, audioPath});
-                }
-
-              });
-          } else {
-            console.log('Error: ' + err);
-            done(err);
-          }
-        });
-
-        // ytdlVideo.then(function (video) {
-        //   console.log('The video is ready to be processed');
-
-        //   video
-        //     .addCommand('-acodec', 'copy')
-        //     .addCommand('-vn')
-        //     .save(audioPath, function (err, file) {
-        //       if (err) {
-        //         done(err);
-        //       } else {
-        //         console.log('Video file: ' + file);
-        //         done(null, {videoPath, audioPath});
-        //       }
-
-        //     });
-        // }, function (err) {
-        //   console.log('Error: ' + err);
-        //   done(err);
-        // });
-      } catch (e) {
-        console.log(e.code);
-        console.log(e.msg);
-        done(e);
-      }
+      ffmpeg(videoPath)
+        .outputOptions([
+          '-vn',
+          '-acodec copy'
+        ])
+        .on('error', function(err) {
+          console.log('An error occurred: ' + err.message);
+          console.log(err);
+          done(err);
+        })
+        .on('end', function() {
+          console.log('Processing finished !');
+          done(null, {videoPath, audioPath});
+        })
+        .save(audioPath);
     });
 
     stream.on('error', (err) => {

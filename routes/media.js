@@ -4,17 +4,18 @@ const router = express.Router();
 const Queue = require('bee-queue');
 const queue = new Queue('ytdl');
 
+const VIDEO_ITAG = 43;
+
 /* GET users listing. */
 router.get('/:id', function(req, res, next) {
   const ytId = req.params.id;
   const job = queue.createJob({
-    audioQuality: 251,
-    videoQuality: 248
+    videoItag: VIDEO_ITAG
   }).setId(ytId);
 
   job.on('succeeded', function (result) {
     console.log('completed job ' + job.id);
-    res.send('output: ' + result);
+    res.send(result);
   });
 
   job.on('retrying', (err) => {
