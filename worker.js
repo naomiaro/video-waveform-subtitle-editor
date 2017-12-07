@@ -5,6 +5,10 @@ const Queue = require('bee-queue');
 const ffmpeg = require('fluent-ffmpeg');
 
 const queue = new Queue('ytdl', {
+  redis: {
+    host: 'redis',
+    port: 6379
+  },
   removeOnSuccess: true,
   removeOnFailure: true,
 });

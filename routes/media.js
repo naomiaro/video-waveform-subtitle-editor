@@ -4,7 +4,12 @@ const Queue = require('bee-queue');
 const fs = require('fs');
 
 const router = express.Router();
-const queue = new Queue('ytdl');
+const queue = new Queue('ytdl', {
+  redis: {
+    host: 'redis',
+    port: 6379
+  }
+});
 const VIDEO_ITAG = 43;
 
 router.post('/', function(req, res, next) {
