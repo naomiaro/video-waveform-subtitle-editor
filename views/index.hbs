@@ -1,41 +1,5 @@
-<div class="overlay-loading">
-	<div>LOADING...</div>
-  </div>
-  <div class="stage">
-	<div class="ted-media">
-	  <video id="video" width="700" preload="auto">
-		{{!-- <source src="video.webm" type="video/webm"> --}}
-			<source src="/media/q9ANdC7ZFAI" type="video/webm">
-	  </video>
-	  <div id="playlist"></div>
-	  <div class="playlist-toolbar">
-		<div class="audio-ctrl-container">
-		  <span class="btn-rewind audio-ctrl"><i class="fa fa-fast-backward"></i></span>
-		  <span class="btn-pause audio-ctrl audio-ctrl-big"><i class="fa fa-pause"></i></span>
-		  <span class="btn-play audio-ctrl audio-ctrl-big"><i class="fa fa-play"></i></span>
-		  <span class="btn-stop audio-ctrl audio-ctrl-big"><i class="fa fa-stop"></i></span>
-		  <span class="btn-fast-forward audio-ctrl"><i class="fa fa-fast-forward"></i></span>
-		</div>
-		<label class="audio-pos">00:00:00.0</label>
-	  </div>
-	  <div class="ted-annotations-controls">
-		<select class="time-format">
-		  <option value="seconds">seconds</option>
-		  <option value="thousandths">thousandths</option>
-		  <option value="hh:mm:ss">hh:mm:ss</option>
-		  <option value="hh:mm:ss.u">hh:mm:ss + tenths</option>
-		  <option value="hh:mm:ss.uu" selected="selected">hh:mm:ss + hundredths</option>
-		  <option value="hh:mm:ss.uuu">hh:mm:ss + milliseconds</option>
-		</select>
-		<div class="annotation-play-option">
-		  <label>
-			<input type="checkbox" class="continuous-play">Continuous Annotation Play
-		  </label>
-		</div>
-		<div title="Download an updated srt file" class="btn-annotations-download">
-		  <i class="fa fa-download"></i>
-		</div>
-	  </div>
-	</div>
-</div>
-<script type="text/javascript" src="app.js"></script>
+<form method="POST" action="/media/" encType="multipart/form-data">
+  <input type="text" name="ytid">
+  <input type="file" name="srt">
+  <input type="submit" value="Submit">
+</form>

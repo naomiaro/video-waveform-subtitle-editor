@@ -1,7 +1,9 @@
 const fs = require('fs');
 const ytdl = require('ytdl-core');
+const path = require('path');
 const Queue = require('bee-queue');
 const ffmpeg = require('fluent-ffmpeg');
+
 const queue = new Queue('ytdl', {
   removeOnSuccess: true,
   removeOnFailure: true,
@@ -11,8 +13,8 @@ queue.on('ready', function () {
   queue.process(function (job, done) {
     console.log(`processing job ${job.id} with itag ${job.data.videoItag}`);
 
-    const videoPath = `${__dirname}/dist/${job.id}.webm`;
-    const audioPath = `${__dirname}/dist/${job.id}.ogg`;
+    const videoPath = path.join(__dirname, 'dist', `${job.id}.webm`);
+    const audioPath = path.join(__dirname, 'dist', `${job.id}.ogg`);
 
     const stream = ytdl(`http://www.youtube.com/watch?v=${job.id}`, {
       quality: job.data.videoItag

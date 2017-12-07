@@ -1,5 +1,6 @@
 const srtParser = require('subtitles-parser');
-const qs = require('qs');
+// const qs = require('qs');
+const YTID = window.location.pathname.substring(1);
 
 require('bootstrap/dist/css/bootstrap.min.css');
 require('font-awesome/css/font-awesome.min.css');
@@ -133,7 +134,7 @@ var actions = [
 
 
 
-fetch('Mogensen.srt')
+fetch(`${YTID}.srt`)
   .then((response) => {
     return response.text();
   })
@@ -198,7 +199,7 @@ fetch('Mogensen.srt')
 
     playlist.load([
       {
-        src: "251.ogg"
+        src: `${YTID}.ogg`
       }
     ]).then(function() {
       //can do stuff with the playlist.
