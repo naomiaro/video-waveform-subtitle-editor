@@ -1,15 +1,13 @@
-const srtParser = require('subtitles-parser');
-// const qs = require('qs');
-const YTID = window.location.pathname.substring(1);
-
 require('bootstrap/dist/css/bootstrap.min.css');
 require('font-awesome/css/font-awesome.min.css');
 require('./app.scss');
 
+const srtParser = require('subtitles-parser');
 const createElement = require('virtual-dom/create-element');
 const EventEmitter = require('event-emitter');
 const Playlist = require('waveform-playlist/lib/Playlist');
 
+const YTID = window.location.pathname.substring(1);
 window.OfflineAudioContext = window.OfflineAudioContext || window.webkitOfflineAudioContext;
 window.AudioContext = window.AudioContext || window.webkitAudioContext;
 const audioContext = new window.AudioContext();
