@@ -1102,8 +1102,6 @@ var actions = [
   }
 ];
 
-
-
 fetch(`${YTID}.srt`)
   .then((response) => {
     return response.text();
@@ -1134,8 +1132,8 @@ fetch(`${YTID}.srt`)
     playlist.setDurationFormat('hh:mm:ss.uu');
     playlist.setState('cursor');
     playlist.setControlOptions({
-        show: false,
-        width: 150,
+      show: false,
+      width: 150,
     });
     playlist.setWaveHeight(96);
     playlist.setColors({
@@ -1169,7 +1167,8 @@ fetch(`${YTID}.srt`)
 
     playlist.load([
       {
-        src: `${YTID}.ogg`
+        src: `${YTID}.ogg`,
+        muted: true
       }
     ]).then(function() {
       //can do stuff with the playlist.
