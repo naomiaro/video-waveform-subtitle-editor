@@ -8,9 +8,10 @@
     "webpack:server": "webpack-dev-server --content-base dist/ --colors --host 0.0.0.0 --inline",
     "build": "webpack",
     "deploy": "gh-pages -d dist",
-    "local": "node ./bin/www",
-    "worker": "node worker.js",
-    "start": "npm-run-all --parallel local worker"
+    "local": "forever start ./bin/www",
+    "worker": "forever start worker.js",
+    "start": "npm-run-all --parallel local worker",
+    "stop": "forever stopall"
   },
   "repository": {
     "type": "git",
@@ -34,6 +35,7 @@
     "css-loader": "^0.28.7",
     "extract-text-webpack-plugin": "^3.0.2",
     "file-loader": "^1.1.5",
+    "forever": "^0.15.3",
     "gh-pages": "^1.1.0",
     "node-sass": "^4.6.0",
     "npm-run-all": "^4.1.2",
