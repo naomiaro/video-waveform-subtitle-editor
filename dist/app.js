@@ -1242,7 +1242,7 @@ fetch(`${YTID}.srt`)
 
     const annotationsDownloadCtrl = document.querySelector('.btn-annotations-download');
     annotationsDownloadCtrl.onclick = () => {
-      const output = playlist.annotationList.annotations.map((annotation) => {
+      const output = playlist.annotations.map((annotation) => {
         return {
           id: annotation.id,
           startTime: annotation.start * 1000,
