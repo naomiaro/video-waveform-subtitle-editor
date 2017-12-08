@@ -1,8 +1,11 @@
-web:
-  build: .
-  ports:
-    - "80:3000"
-  links:
-    - redis
-redis:
-  image: "redis:alpine"
+version: '3'
+services:
+  web:
+    build: .
+    ports:
+      - "80:3000"
+    depends_on:
+      - redis
+    image: "naomiaro/videocaptions:0.0.1"
+  redis:
+    image: "redis:alpine"
