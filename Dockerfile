@@ -1,5 +1,11 @@
 FROM node:carbon
 
+RUN echo deb http://ftp.uk.debian.org/debian jessie-backports main \
+    >>/etc/apt/sources.list
+
+RUN apt-get update
+RUN apt-get install ffmpeg -y
+
 # Create app directory
 WORKDIR /usr/src/app
 
