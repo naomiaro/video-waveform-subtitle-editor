@@ -968,18 +968,16 @@ function logarithmic(length, base, rotation) {
 /* 25 */
 /***/ (function(module, exports, __webpack_require__) {
 
-const srtParser = __webpack_require__(26);
-// const qs = require('qs');
-const YTID = window.location.pathname.substring(1);
-
+__webpack_require__(26);
 __webpack_require__(27);
 __webpack_require__(28);
-__webpack_require__(29);
 
+const srtParser = __webpack_require__(29);
 const createElement = __webpack_require__(30);
 const EventEmitter = __webpack_require__(39);
 const Playlist = __webpack_require__(55);
 
+const YTID = window.location.pathname.substring(1);
 window.OfflineAudioContext = window.OfflineAudioContext || window.webkitOfflineAudioContext;
 window.AudioContext = window.AudioContext || window.webkitAudioContext;
 const audioContext = new window.AudioContext();
@@ -1167,8 +1165,7 @@ fetch(`${YTID}.srt`)
 
     playlist.load([
       {
-        src: `${YTID}.ogg`,
-        muted: true
+        src: `${YTID}.ogg`
       }
     ]).then(function() {
       //can do stuff with the playlist.
@@ -1409,6 +1406,24 @@ fetch(`${YTID}.srt`)
 
 /***/ }),
 /* 26 */
+/***/ (function(module, exports) {
+
+// removed by extract-text-webpack-plugin
+
+/***/ }),
+/* 27 */
+/***/ (function(module, exports) {
+
+// removed by extract-text-webpack-plugin
+
+/***/ }),
+/* 28 */
+/***/ (function(module, exports) {
+
+// removed by extract-text-webpack-plugin
+
+/***/ }),
+/* 29 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var parser = (function() {
@@ -1518,24 +1533,6 @@ if (true) {
     module.exports = parser;
 }
 
-
-/***/ }),
-/* 27 */
-/***/ (function(module, exports) {
-
-// removed by extract-text-webpack-plugin
-
-/***/ }),
-/* 28 */
-/***/ (function(module, exports) {
-
-// removed by extract-text-webpack-plugin
-
-/***/ }),
-/* 29 */
-/***/ (function(module, exports) {
-
-// removed by extract-text-webpack-plugin
 
 /***/ }),
 /* 30 */
@@ -9433,7 +9430,6 @@ var AnnotationList = function () {
       });
 
       ee.on('scroll', function () {
-        _this2.boxesCache = null;
         _this2.playlist.annotations = _this2.playlist.annotations.map(function (note) {
           return _this2.updateAnnotation(note.id, note.start, note.end, note.lines, note.lang);
         });
@@ -9481,13 +9477,9 @@ var AnnotationList = function () {
       }
     }
   }, {
-    key: 'renderBoxes',
-    value: function renderBoxes() {
+    key: 'render',
+    value: function render() {
       var _this3 = this;
-
-      if (this.boxesCache) {
-        return this.boxesCache;
-      }
 
       var boxes = (0, _h2.default)('div.annotations-boxes', {
         attributes: {
@@ -9547,14 +9539,6 @@ var AnnotationList = function () {
         })]);
       }));
 
-      this.boxesCache = boxes;
-      return boxes;
-    }
-  }, {
-    key: 'render',
-    value: function render() {
-      var _this4 = this;
-
       var text = (0, _h2.default)('div.annotations-text', {
         hook: new _ScrollTopHook2.default(),
         onclick: function onclick(e) {
@@ -9562,11 +9546,11 @@ var AnnotationList = function () {
           if (el.classList.contains('anno-ctrl')) {
             var annotationIndex = parseInt(el.parentNode.parentNode.dataset.index, 10);
             var ctrl = parseInt(el.dataset.ctrl, 10);
-            var annotations = _this4.playlist.annotations;
-            _this4.controls[ctrl].action.call(_this4.playlist, annotations[annotationIndex], annotationIndex, annotations, {
-              linkEndpoints: _this4.playlist.linkEndpoints
+            var annotations = _this3.playlist.annotations;
+            _this3.controls[ctrl].action.call(_this3.playlist, annotations[annotationIndex], annotationIndex, annotations, {
+              linkEndpoints: _this3.playlist.linkEndpoints
             });
-            _this4.playlist.drawRequest();
+            _this3.playlist.drawRequest();
           }
         },
         onkeypress: function onkeypress(e) {
@@ -9578,18 +9562,18 @@ var AnnotationList = function () {
         oninput: function oninput(e) {
           var el = e.target;
           var annotationIndex = parseInt(el.parentNode.dataset.index, 10);
-          var annotations = _this4.playlist.annotations;
+          var annotations = _this3.playlist.annotations;
           var note = annotations[annotationIndex];
           var lines = e.target.innerText.split('\n');
 
-          annotations[annotationIndex] = _this4.updateAnnotation(note.id, note.start, note.end, lines, note.lang);
-          _this4.playlist.ee.emit('annotationchange', annotations[annotationIndex], annotationIndex, annotations, {
-            linkEndpoints: _this4.playlist.linkEndpoints
+          annotations[annotationIndex] = _this3.updateAnnotation(note.id, note.start, note.end, lines, note.lang);
+          _this3.playlist.ee.emit('annotationchange', annotations[annotationIndex], annotationIndex, annotations, {
+            linkEndpoints: _this3.playlist.linkEndpoints
           });
         }
       }, this.playlist.annotations.map(function (note, i, annotations) {
         var segmentClass = '';
-        if (_this4.playlist.isPlaying() && _this4.playlist.playbackSeconds >= note.start && _this4.playlist.playbackSeconds <= note.end) {
+        if (_this3.playlist.isPlaying() && _this3.playlist.playbackSeconds >= note.start && _this3.playlist.playbackSeconds <= note.end) {
           segmentClass = '.current';
         }
 
@@ -9599,13 +9583,13 @@ var AnnotationList = function () {
           }
         };
 
-        var linesConfig = _this4.editable ? editableConfig : {};
+        var linesConfig = _this3.editable ? editableConfig : {};
 
         return (0, _h2.default)('div.annotation' + segmentClass, {
           attributes: {
             'data-index': i
           }
-        }, [(0, _h2.default)('span.annotation-id', [note.id]), (0, _h2.default)('span.annotation-start', [note.displayStart]), (0, _h2.default)('span.annotation-end', [note.displayEnd]), (0, _h2.default)('span.annotation-lines', linesConfig, [note.lines.join('\n')]), (0, _h2.default)('span.annotation-actions', _this4.controls.map(function (ctrl, ctrlIndex) {
+        }, [(0, _h2.default)('span.annotation-id', [note.id]), (0, _h2.default)('span.annotation-start', [note.displayStart]), (0, _h2.default)('span.annotation-end', [note.displayEnd]), (0, _h2.default)('span.annotation-lines', linesConfig, [note.lines.join('\n')]), (0, _h2.default)('span.annotation-actions', _this3.controls.map(function (ctrl, ctrlIndex) {
           return (0, _h2.default)('i.' + ctrl.class + '.anno-ctrl', {
             attributes: {
               title: ctrl.title,
@@ -9615,7 +9599,7 @@ var AnnotationList = function () {
         }))]);
       }));
 
-      return [this.renderBoxes(), text];
+      return [boxes, text];
     }
   }]);
 

@@ -195,8 +195,7 @@ fetch(`${YTID}.srt`)
 
     playlist.load([
       {
-        src: `${YTID}.ogg`,
-        muted: true
+        src: `${YTID}.ogg`
       }
     ]).then(function() {
       //can do stuff with the playlist.
