@@ -11,11 +11,12 @@ const queue = new Queue('ytdl', {
   }
 });
 const VIDEO_ITAG = 43;
+const MEDIA_DIR = path.join(__dirname, '..', '..', 'media');
 
 router.post('/', function(req, res, next) {
   const srtFile = req.files.srt;
   const ytid = req.body.ytid;
-  const audioPath = path.join(__dirname, '..', 'dist', `${ytid}.ogg`);
+  const audioPath = path.join(MEDIA_DIR, `${ytid}.ogg`);
 
   fs.access(audioPath, fs.constants.R_OK, (err) => {
     if (err) {
@@ -41,7 +42,7 @@ router.post('/', function(req, res, next) {
       });
 
       Promise.all([
-        srtFile.mv(path.join(__dirname, '..', 'dist', `${ytid}.srt`)),
+        srtFile.mv(path.join(MEDIA_DIR, `${ytid}.srt`)),
         job.save()
       ]).catch((err) => {
         console.log(`${err.message}`);

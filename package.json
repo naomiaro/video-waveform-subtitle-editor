@@ -8,10 +8,11 @@
     "webpack:server": "webpack-dev-server --content-base dist/ --colors --host 0.0.0.0 --inline",
     "build": "webpack",
     "deploy": "gh-pages -d dist",
-    "local": "forever ./bin/www",
-    "worker": "forever worker.js",
-    "start": "npm-run-all --parallel local worker",
-    "stop": "forever stopall"
+    "server": "forever ./server/bin/www",
+    "worker": "forever ./server/worker.js",
+    "start": "npm-run-all --parallel server worker",
+    "stop": "forever stopall",
+    "dev": "forever ./forever/development.json"
   },
   "repository": {
     "type": "git",

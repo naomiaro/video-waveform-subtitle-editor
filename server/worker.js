@@ -13,14 +13,16 @@ const queue = new Queue('ytdl', {
   removeOnFailure: true,
 });
 
+const MEDIA_DIR = path.join(__dirname, '..', 'media');
+
 queue.on('ready', function () {
   queue.process(function (job, done) {
     console.log(`processing job ${job.id} with itag ${job.data.videoItag}`);
 
-    const videoPath = path.join(__dirname, 'dist', `${job.id}.webm`);
-    const audioPath = path.join(__dirname, 'dist', `${job.id}.ogg`);
+    const videoPath = path.join(MEDIA_DIR, `${job.id}.webm`);
+    const audioPath = path.join(MEDIA_DIR, `${job.id}.ogg`);
 
-    const stream = ytdl(`http://www.youtube.com/watch?v=${job.id}`, {
+    const stream = ytdl(`https://www.youtube.com/watch?v=${job.id}`, {
       quality: job.data.videoItag
     }).pipe(fs.createWriteStream(videoPath));
 

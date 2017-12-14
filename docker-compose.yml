@@ -7,5 +7,8 @@ services:
     depends_on:
       - redis
     image: "naomiaro/videocaptions:0.0.1"
+    volumes:
+      - ./client:/usr/src/app/client
+      - ./server:/usr/src/app/server
   redis:
     image: "redis:alpine"
