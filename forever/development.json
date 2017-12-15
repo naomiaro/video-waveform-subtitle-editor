@@ -4,15 +4,15 @@
     "uid": "server",
     "append": true,
     "watch": true,
-    "script": "server/bin/www",
-    "sourceDir": "/usr/src/app"
+    "script": "bin/www",
+    "sourceDir": "/usr/src/app/server"
   },
   {
     // worker
     "uid": "worker",
     "append": true,
     "watch": true,
-    "script": "server/worker.js",
-    "sourceDir": "/usr/src/app"
+    "script": "worker.js",
+    "sourceDir": "/usr/src/app/server"
   }
 ]
