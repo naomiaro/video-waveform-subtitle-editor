@@ -10,5 +10,6 @@ services:
     volumes:
       - ./client:/usr/src/app/client
       - ./server:/usr/src/app/server
+      - /Users/naomiaro/.nvm/versions/node/v8.9.1/lib/node_modules/waveform-playlist:/usr/src/app/node_modules/waveform-playlist
   redis:
     image: "redis:alpine"

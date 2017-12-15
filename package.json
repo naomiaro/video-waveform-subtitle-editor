@@ -4,15 +4,15 @@
   "description": "Subtitle editor with HTML5 video and webaudio",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "webpack:server": "webpack-dev-server --content-base dist/ --colors --host 0.0.0.0 --inline",
-    "build": "webpack",
     "deploy": "gh-pages -d dist",
+    "build-js": "webpack",
+    "watch-js": "watch 'npm run build-js' client",
     "server": "forever ./server/bin/www",
     "worker": "forever ./server/worker.js",
     "start": "npm-run-all --parallel server worker",
     "stop": "forever stopall",
-    "dev": "forever ./forever/development.json"
+    "serve-dev": "forever ./forever/development.json",
+    "dev": "npm-run-all --parallel serve-dev watch-js"
   },
   "repository": {
     "type": "git",
@@ -40,6 +40,7 @@
     "node-sass": "^4.6.0",
     "sass-loader": "^6.0.6",
     "style-loader": "^0.19.0",
+    "watch": "^1.0.2",
     "webpack": "^3.8.1",
     "webpack-dev-server": "^2.9.4"
   },
