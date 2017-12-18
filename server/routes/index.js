@@ -4,7 +4,7 @@ const express = require('express');
 const router = express.Router();
 
 router.get('/', function(req, res, next) {
-  res.render('index');
+  res.render('index', { title: 'Video Subtitle Editor' });
 });
 
 router.get('/:ytid', function(req, res, next) {

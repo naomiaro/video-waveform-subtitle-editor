@@ -13,42 +13,56 @@ const queue = new Queue('ytdl', {
   removeOnFailure: true,
 });
 
+function extractAudio(videoPath, audioPath, done) {
+  ffmpeg(videoPath)
+    .outputOptions([
+      '-vn',
+      '-acodec copy'
+    ])
+    .on('error', function(err) {
+      console.log('An error occurred: ' + err.message);
+      console.log(err);
+      done(err);
+    })
+    .on('end', function() {
+      console.log('Processing finished !');
+      done(null, {videoPath, audioPath});
+    })
+    .save(audioPath);
+}
+
 const MEDIA_DIR = path.join(__dirname, '..', 'media');
 
 queue.on('ready', function () {
   queue.process(function (job, done) {
-    console.log(`processing job ${job.id} with itag ${job.data.videoItag}`);
+    console.log(`processing job ${job.id}`);
 
     const videoPath = path.join(MEDIA_DIR, `${job.id}.webm`);
     const audioPath = path.join(MEDIA_DIR, `${job.id}.ogg`);
 
-    const stream = ytdl(`https://www.youtube.com/watch?v=${job.id}`, {
-      quality: job.data.videoItag
-    }).pipe(fs.createWriteStream(videoPath));
+    fs.access(audioPath, fs.constants.R_OK, (err) => {
+      if (err) {
+        if (job.data.videoItag) {
+          console.log(` Downloading https://www.youtube.com/watch?v=${job.id}`);
+          const stream = ytdl(`https://www.youtube.com/watch?v=${job.id}`, {
+            quality: job.data.videoItag
+          }).pipe(fs.createWriteStream(videoPath));
 
-    stream.on('finish', () => {
-      console.log('ytdl finished streaming.');
+          stream.on('finish', () => {
+            console.log('ytdl finished streaming.');
+            extractAudio(videoPath, audioPath, done);
+          });
 
-      ffmpeg(videoPath)
-        .outputOptions([
-          '-vn',
-          '-acodec copy'
-        ])
-        .on('error', function(err) {
-          console.log('An error occurred: ' + err.message);
-          console.log(err);
-          done(err);
-        })
-        .on('end', function() {
-          console.log('Processing finished !');
-          done(null, {videoPath, audioPath});
-        })
-        .save(audioPath);
-    });
-
-    stream.on('error', (err) => {
-      console.log(err);
-      done(err);
+          stream.on('error', (err) => {
+            console.log(err);
+            done(err);
+          });
+        } else {
+          extractAudio(videoPath, audioPath, done);
+        }
+      } else {
+        done(null, {videoPath, audioPath});
+      }
     });
   });
 

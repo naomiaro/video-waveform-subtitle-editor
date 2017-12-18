@@ -7850,4 +7850,7 @@ body {
 footer {
   margin-top: 2em; }
 
+.media-upload {
+  display: flex; }
+
 /*# sourceMappingURL=app.css.map*/
