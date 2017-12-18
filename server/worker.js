@@ -43,7 +43,7 @@ queue.on('ready', function () {
     fs.access(audioPath, fs.constants.R_OK, (err) => {
       if (err) {
         if (job.data.videoItag) {
-          console.log(` Downloading https://www.youtube.com/watch?v=${job.id}`);
+          console.log(`Downloading https://www.youtube.com/watch?v=${job.id}`);
           const stream = ytdl(`https://www.youtube.com/watch?v=${job.id}`, {
             quality: job.data.videoItag
           }).pipe(fs.createWriteStream(videoPath));

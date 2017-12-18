@@ -1,17 +1,17 @@
-<section class="media-upload">
-  <form method="POST" action="/media/" encType="multipart/form-data">
-    <fieldset>
-      <legend>Video Input</legend>
-      <label for="video">Local Video</label>
-      <input type="file" name="video" id="video">
-      <label for="ytUri">YouTube Video</label>
-      <input type="text" name="ytUri" id="ytUri">
-    </fieldset>
-    <fieldset>
-      <legend>Subtitle File</legend>
-      <label for="srt">SRT</label>
-      <input type="file" name="srt" id="srt">
-    </fieldset>
-    <input type="submit" value="Submit" class="btn">
-  </form>
-</section>
+<form method="POST" action="/media/" encType="multipart/form-data" class="media-upload">
+  <fieldset class="form-group">
+    <legend>Video Input</legend>
+    <label for="video">Local Video</label>
+    <input type="file" name="video" id="video">
+    <label for="ytUri">YouTube Video</label>
+    <input type="text" name="ytUri" id="ytUri" placeholder="https://www.youtube.com/watch?v=q9ANdC7ZFAI" class="yt-uri">
+  </fieldset>
+  <fieldset class="form-group">
+    <legend>Subtitle File</legend>
+    <label for="srt">SRT</label>
+    <input type="file" name="srt" id="srt">
+  </fieldset>
+  <fieldset class="form-group">
+    <input type="submit" value="Submit" class="btn btn-default">
+  </fieldset>
+</form>
