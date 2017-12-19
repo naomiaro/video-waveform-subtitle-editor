@@ -2,14 +2,21 @@
   {
     // server
     "append": true,
-    "watch": true,
+    "watch": false,
     "script": "bin/www",
     "sourceDir": "/usr/src/app/server"
   },
   {
-    // worker
+    // worker 1
     "append": true,
-    "watch": true,
+    "watch": false,
+    "script": "worker.js",
+    "sourceDir": "/usr/src/app/server"
+  },
+  {
+    // worker 2
+    "append": true,
+    "watch": false,
     "script": "worker.js",
     "sourceDir": "/usr/src/app/server"
   }

@@ -9,7 +9,7 @@
     "watch-js": "watch 'npm run build-js' client",
     "server": "forever ./server/bin/www",
     "worker": "forever ./server/worker.js",
-    "start": "npm-run-all --parallel server worker",
+    "start": "forever ./forever/production.json",
     "stop": "forever stopall",
     "serve-dev": "forever ./forever/development.json",
     "dev": "npm-run-all --parallel serve-dev watch-js"
