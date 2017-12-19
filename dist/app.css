@@ -7654,9 +7654,15 @@ button.close {
   margin: 0;
   overflow: visible;
   clip: auto; }
+html {
+  width: 100%;
+  height: 100%; }
+
 body {
   color: #7f7fb5;
-  background: #000; }
+  background: #000;
+  width: 100%;
+  height: 100%; }
 
 .overlay-loading {
   position: absolute;
@@ -7851,6 +7857,17 @@ footer {
   margin-top: 2em; }
 
 .media-upload {
-  display: flex; }
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 100%; }
+  .media-upload .form-group {
+    width: 50%; }
+    .media-upload .form-group:last-child {
+      text-align: right; }
+  .media-upload .yt-uri {
+    width: 350px; }
 
 /*# sourceMappingURL=app.css.map*/

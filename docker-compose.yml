@@ -6,7 +6,6 @@ services:
       - "80:3000"
     depends_on:
       - redis
-    image: "naomiaro/videocaptions:0.0.1"
     volumes:
       - ./client:/usr/src/app/client
       - ./server:/usr/src/app/server

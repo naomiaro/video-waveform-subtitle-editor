@@ -289,6 +289,10 @@ footer {
 
   .form-group {
     width: 50%;
+
+    &:last-child {
+      text-align: right;
+    }
   }
 
   .yt-uri {
