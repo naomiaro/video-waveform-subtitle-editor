@@ -7,8 +7,6 @@
     "deploy": "gh-pages -d dist",
     "build-js": "webpack",
     "watch-js": "watch 'npm run build-js' client",
-    "server": "forever ./server/bin/www",
-    "worker": "forever ./server/worker.js",
     "start": "forever ./forever/production.json",
     "stop": "forever stopall",
     "serve-dev": "forever ./forever/development.json",
