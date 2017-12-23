@@ -6370,7 +6370,7 @@ var TimeScale = function () {
         }
       }, (0, _h2.default)('div.playlist-time-scale-scroll', {
         attributes: {
-          style: 'position: absolute; width: 100%; height: 100%; left: ' + pixOffset + 'px;'
+          style: 'position: absolute; width: 100%; height: 100%; transform: translate(' + pixOffset + 'px, 0px);'
         }
       }, [timeMarkers, (0, _h2.default)('canvas', {
         attributes: {
@@ -9527,7 +9527,7 @@ var AnnotationList = function () {
         }
       }, (0, _h2.default)('div.annotations-boxes-container', {
         attributes: {
-          style: 'position: absolute; width: 100%; height: 100%; left: ' + pixOffset + 'px;'
+          style: 'position: absolute; width: 100%; height: 100%; transform: translate(' + pixOffset + 'px, 0px);'
         }
       }, this.playlist.annotations.map(function (note, i) {
         return (0, _h2.default)('div.annotation-box', {
