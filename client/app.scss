@@ -18,6 +18,10 @@ body {
   height: 100%;
 }
 
+legend {
+  color: $red;
+}
+
 .overlay-loading {
   position: absolute;
   width: 100%;
@@ -152,6 +156,8 @@ body {
   }
 
   .annotations-text {
+    background-color: white;
+    color: black;
     font-size: 15px;
     font-weight: 300;
     overflow-x: hidden;
@@ -168,6 +174,7 @@ body {
       flex-wrap: nowrap;
       justify-content: flex-start;
       align-items: center;
+      margin-bottom: 0.6rem;
 
       span {
         margin: 0.3rem 1rem;
@@ -178,28 +185,39 @@ body {
       }
 
       .annotation-id {
+        color: $red;
         width: 30px;
         text-align: right;
         line-height: 27px;
+      }
+
+      .annotation-times {
+        display: flex;
+        flex-direction: column;
+        margin: 0;
+        font-size: 14px;
       }
 
       .annotation-start {
         width: 90px;
         text-align: right;
         line-height: 27px;
+        margin-top: 0;
+        margin-bottom: 0;
       }
 
       .annotation-end {
         width: 90px;
         text-align: right;
         line-height: 27px;
+        margin-top: 0;
+        margin-bottom: 0;
       }
 
       .annotation-lines {
         flex-grow: 10;
         white-space: pre;
-        color: white;
-        font-weight: 100;
+        font-weight: 400;
         font-size: 18px;
       }
 
@@ -207,7 +225,7 @@ body {
         flex-basis: auto;
         width: 80px;
         text-align: right;
-        font-size: 16px;
+        font-size: 15px;
 
         i {
           margin-right: 0.6rem;
@@ -226,6 +244,7 @@ body {
 
     .current {
       background: $black;
+      color: $purple;
       .annotation-lines {
         color: orange;
       }
