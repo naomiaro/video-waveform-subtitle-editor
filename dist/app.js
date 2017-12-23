@@ -1310,9 +1310,31 @@ fetch(`${YTID}.srt`)
 
     ee.on("timeupdate", updateTime);
 
-    ee.on("audiosourcesrendered", function() {
-      const overlay = document.querySelector('.overlay-loading');
+
+
+    let overlay = document.querySelector('.overlay-loading');
+    let progress = document.getElementById('progress');
+    let decoded = document.getElementById('decoded');
+
+    ee.on('loadprogress', (percent, src) => {
+      var name = src;
+
+      if (src instanceof File) {
+        name = src.name;
+      }
+
+      progress.innerHTML = `Audio has loaded ${percent}%`;
+    });
+
+    ee.on('audiosourcesloaded', () => {
+      decoded.innerHTML = 'Audio finished decoding.';
+    });
+
+    ee.on('audiosourcesrendered', () => {
       overlay.remove();
+      overlay = null;
+      progress = null;
+      decoded = null;
     });
 
     ee.on('automaticscroll', (val) => {
