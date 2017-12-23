@@ -2302,11 +2302,11 @@ var _AnnotationList = __webpack_require__(115);
 
 var _AnnotationList2 = _interopRequireDefault(_AnnotationList);
 
-var _recorderWorker = __webpack_require__(120);
+var _recorderWorker = __webpack_require__(121);
 
 var _recorderWorker2 = _interopRequireDefault(_recorderWorker);
 
-var _exportWavWorker = __webpack_require__(121);
+var _exportWavWorker = __webpack_require__(122);
 
 var _exportWavWorker2 = _interopRequireDefault(_exportWavWorker);
 
@@ -9279,7 +9279,11 @@ var _ScrollTopHook = __webpack_require__(118);
 
 var _ScrollTopHook2 = _interopRequireDefault(_ScrollTopHook);
 
-var _timeformat = __webpack_require__(119);
+var _ContentEditableHook = __webpack_require__(119);
+
+var _ContentEditableHook2 = _interopRequireDefault(_ContentEditableHook);
+
+var _timeformat = __webpack_require__(120);
 
 var _timeformat2 = _interopRequireDefault(_timeformat);
 
@@ -9584,21 +9588,16 @@ var AnnotationList = function () {
           segmentClass = '.current';
         }
 
-        var editableConfig = {
-          attributes: {
-            contenteditable: true
-          }
-        };
-
-        var linesConfig = _this3.editable ? editableConfig : {};
-
         return (0, _h2.default)('div.annotation' + segmentClass, {
           attributes: {
             'data-index': i
           }
-        }, [(0, _h2.default)('span.annotation-id', [note.id]), (0, _h2.default)('span.annotation-times', [(0, _h2.default)('span.annotation-start', [note.displayStart]), (0, _h2.default)('span.annotation-end', [note.displayEnd])]), (0, _h2.default)('span.annotation-lines', linesConfig,
-        // TODO check with newline <div> problems.
-        note.lines.join('\n')), (0, _h2.default)('span.annotation-actions', _this3.controls.map(function (ctrl, ctrlIndex) {
+        }, [(0, _h2.default)('span.annotation-id', [note.id]), (0, _h2.default)('span.annotation-times', [(0, _h2.default)('span.annotation-start', [note.displayStart]), (0, _h2.default)('span.annotation-end', [note.displayEnd])]), (0, _h2.default)('span.annotation-lines', {
+          attributes: {
+            contenteditable: _this3.editable ? true : false
+          },
+          hook: new _ContentEditableHook2.default(note.lines.join('\n'))
+        }), (0, _h2.default)('span.annotation-actions', _this3.controls.map(function (ctrl, ctrlIndex) {
           return (0, _h2.default)('i.' + ctrl.class + '.anno-ctrl', {
             attributes: {
               title: ctrl.title,
@@ -9705,6 +9704,48 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+/*
+* virtual-dom hook for maintaining the contenteditable.
+*/
+var _class = function () {
+  function _class(text) {
+    _classCallCheck(this, _class);
+
+    this.text = text;
+  }
+
+  _createClass(_class, [{
+    key: "hook",
+    value: function hook(node, prop, prev) {
+      // editable is up to date
+      if (prev !== undefined && prev.text === this.text) {
+        return;
+      }
+
+      node.innerHTML = this.text;
+    }
+  }]);
+
+  return _class;
+}();
+
+exports.default = _class;
+
+/***/ }),
+/* 120 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
 exports.default = function (format) {
   function clockFormat(seconds, decimals) {
     var hours = parseInt(seconds / 3600, 10) % 24;
@@ -9744,7 +9785,7 @@ exports.default = function (format) {
 };
 
 /***/ }),
-/* 120 */
+/* 121 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -9860,7 +9901,7 @@ exports.default = function () {
 };
 
 /***/ }),
-/* 121 */
+/* 122 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
