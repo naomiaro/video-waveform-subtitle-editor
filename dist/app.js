@@ -6370,7 +6370,7 @@ var TimeScale = function () {
         }
       }, (0, _h2.default)('div.playlist-time-scale-scroll', {
         attributes: {
-          style: 'position: absolute; width: 100%; height: 100%; transform: translate(' + pixOffset + 'px, 0px);'
+          style: 'position: absolute; width: 100%; height: 100%; transform: translate(' + pixOffset + 'px, 0);'
         }
       }, [timeMarkers, (0, _h2.default)('canvas', {
         attributes: {
@@ -6953,14 +6953,14 @@ var _class = function () {
 
       var waveformChildren = [(0, _h2.default)('div.cursor', {
         attributes: {
-          style: 'position: absolute; width: 1px; margin: 0; padding: 0; top: 0; left: ' + playbackX + 'px; bottom: 0; z-index: 5;'
+          style: 'position: absolute; width: 1px; margin: 0; padding: 0; top: 0; transform: translate(' + playbackX + 'px, 0); bottom: 0; z-index: 5;'
         }
       })];
 
       var channels = Object.keys(this.peaks.data).map(function (channelNum) {
         var channelChildren = [(0, _h2.default)('div.channel-progress', {
           attributes: {
-            style: 'position: absolute; width: ' + progressWidth + 'px; height: ' + data.height + 'px; z-index: 2;'
+            style: 'position: absolute; width: ' + width + 'px; transform: translate(' + (progressWidth - width) + 'px, 0); height: ' + data.height + 'px; z-index: 2;'
           }
         })];
         var offset = 0;
@@ -9527,7 +9527,7 @@ var AnnotationList = function () {
         }
       }, (0, _h2.default)('div.annotations-boxes-container', {
         attributes: {
-          style: 'position: absolute; width: 100%; height: 100%; transform: translate(' + pixOffset + 'px, 0px);'
+          style: 'position: absolute; width: 100%; height: 100%; transform: translate(' + pixOffset + 'px, 0);'
         }
       }, this.playlist.annotations.map(function (note, i) {
         return (0, _h2.default)('div.annotation-box', {
